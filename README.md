@@ -67,7 +67,7 @@
 
 Пак разделен на специализированные скиллы:
 
-1. [impl-instrs:formation](./skills/impl-instrs-formation/SKILL.md) — Формирование и инициализация промптов.
-2. [impl-instrs:execution](./skills/impl-instrs-execution/SKILL.md) — Выполнение и контекстуализация.
-3. [impl-instrs:refactoring](./skills/impl-instrs-refactoring/SKILL.md) — Рефакторинг и обновление инструкций/кода.
-4. [impl-instrs:feedback](./skills/impl-instrs-feedback/SKILL.md) — Обратная связь, дебаг и обоснование.
+1. [impl-instrs:formation](./skills/impl-instrs/formation/SKILL.md) — Формирование и инициализация промптов.
+2. [impl-instrs:execution](./skills/impl-instrs/execution/SKILL.md) — Выполнение и контекстуализация.
+3. [impl-instrs:refactoring](./skills/impl-instrs/refactoring/SKILL.md) — Рефакторинг и обновление инструкций/кода.
+4. [impl-instrs:feedback](./skills/impl-instrs/feedback/SKILL.md) — Обратная связь, дебаг и обоснование.
