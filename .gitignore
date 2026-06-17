@@ -1,6 +1,6 @@
 plugin.json
 mcp_config.json
 hooks.json
-rules/
+# rules/
 agents/
-skills/
+# skills/
