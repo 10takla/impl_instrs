@@ -17,7 +17,7 @@ description: Simultaneously update code/implementation results and the correspon
 ## Основные Правила
 
 ### 1. Соблюдение контекста выполнения
-* Применяйте правило [execution-context.md](../../rules/execution-context.md).
+* Применяйте правило [impl-instrs-execution-context.md](../../rules/impl-instrs-execution-context.md).
 * Перед тем как написать рабочий код или отредактировать файлы, убедитесь, что планируемое поведение описано в файлах инструкций.
 * Не разделяйте эти фазы во времени: если вы обновляете код, обновите и инструкцию в той же итерации (или даже в том же запросе).
 

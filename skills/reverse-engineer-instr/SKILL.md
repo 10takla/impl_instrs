@@ -22,5 +22,5 @@ description: Translate existing target implementations, codebases, or artifacts 
 
 ### 2. Формулирование инструкций
 * Сформулируйте пошаговый алгоритм (Transformation) и входной контекст (Inputs), которые привели бы к созданию данной реализации.
-* Опишите выходные артефакты (Outputs) в соответствии со стилем [instruction-style.md](../../rules/instruction-style.md).
+* Опишите выходные артефакты (Outputs) в соответствии со стилем [impl-instrs-instruction-style.md](../../rules/impl-instrs-instruction-style.md).
 * Убедитесь, что инструкции не содержат избыточного кода, а описывают логику его создания.
