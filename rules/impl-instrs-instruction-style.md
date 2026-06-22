@@ -1,7 +1,6 @@
 ---
-description: "Стиль инструкций: принципы лаконичности, целевой полноты и функциональных паттернов для ИИ-агентов"
-trigger: glob
-globs: "**/ai_instrs/**/*, **/*.ai_instrs/**/*, **/ai_instrs.*/**/*, **/ai_instrs.*, **/*.ai_instrs.*"
+description: "MANDATORY TO READ during ANY interaction (even simple reading or mentioning) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
+trigger: model_decision
 ---
 
 ## Принципы

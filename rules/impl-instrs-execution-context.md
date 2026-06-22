@@ -1,7 +1,6 @@
 ---
-description: "Контекст выполнения: связь решений агента с инструкциями и их обновление"
-trigger: glob
-globs: "**/ai_instrs/**/*, **/*.ai_instrs/**/*, **/ai_instrs.*/**/*, **/ai_instrs.*, **/*.ai_instrs.*"
+description: "When executing instruction files. MANDATORY TO READ during ANY interaction (even simple reading or mentioning) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
+trigger: model_decision
 ---
 
 ## Контекст выполнения

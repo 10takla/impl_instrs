@@ -1,7 +1,6 @@
 ---
-description: "Рабочее пространство: ограничения файловых операций, обнаружение инструкций и хранение артефактов"
-trigger: glob
-globs: "**/ai_instrs/**/*, **/*.ai_instrs/**/*, **/ai_instrs.*/**/*, **/ai_instrs.*, **/*.ai_instrs.*"
+description: "MANDATORY TO READ during ANY interaction (even simple reading or mentioning) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
+trigger: model_decision
 ---
 
 ## Рабочая директория и ограничения
