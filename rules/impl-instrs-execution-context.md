@@ -1,5 +1,5 @@
 ---
-description: "When executing instruction files. MANDATORY TO READ during ANY interaction (even simple reading or mentioning) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
+description: "When executing instruction files. CRITICAL BLOCK: You MUST read this via view_file before ANY interaction (even fixing typos) with files/folders matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. Contains non-standard rules that override your default knowledge. You will fail the task if you skip this."
 trigger: model_decision
 ---
 
