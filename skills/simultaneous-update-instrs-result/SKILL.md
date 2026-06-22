@@ -1,6 +1,6 @@
 ---
 name: impl-instrs:simultaneous-update-instrs-result
-description: Simultaneously update code/implementation results and the corresponding instruction files to keep them synchronized.
+description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Simultaneously update code/implementation results and the corresponding instruction files to keep them synchronized. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
 ---
 
 # Одновременное обновление инструкций и результата (Simultaneous Update of Instructions and Result)

@@ -1,6 +1,6 @@
 ---
 name: impl-instrs:reverse-engineer-instr
-description: Translate existing target implementations, codebases, or artifacts back into implementation instruction files.
+description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Translate existing target implementations, codebases, or artifacts back into implementation instruction files."
 ---
 
 # Реверс-инжиниринг инструкций (Reverse Engineering Instructions)

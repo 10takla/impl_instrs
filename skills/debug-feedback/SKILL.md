@@ -1,6 +1,6 @@
 ---
 name: impl-instrs:debug-feedback
-description: Explain, justify, and debug the execution and creation of implementation instructions.
+description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Explain, justify, and debug the execution and creation of implementation instructions. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
 ---
 
 # Дебаг и обратная связь (Debug and Feedback)

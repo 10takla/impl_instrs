@@ -1,6 +1,6 @@
 ---
 name: impl-instrs:instrs-write
-description: Formulate and initialize implementation instruction files (prompts) using a structured functional format.
+description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Formulate and initialize implementation instruction files (prompts) using a structured functional format. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
 ---
 
 # Формирование промптов (Prompt Formulation)

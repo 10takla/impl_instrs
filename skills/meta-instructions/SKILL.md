@@ -1,6 +1,6 @@
 ---
 name: impl-instrs:meta-instructions
-description: Write meta-instructions that define guidelines and formats for other instructions.
+description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Write meta-instructions that define guidelines and formats for other instructions. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
 ---
 
 # Мета-инструкции (Meta-Instructions)

@@ -1,6 +1,6 @@
 ---
 name: impl-instrs:refactor-instrs
-description: Refactor instruction files to optimize their structure, formatting, and relations while preserving their core semantics.
+description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Refactor instruction files to optimize their structure, formatting, and relations while preserving their core semantics. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
 ---
 
 # Рефакторинг инструкций (Refactoring Instructions)
