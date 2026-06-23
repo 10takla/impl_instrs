@@ -3,15 +3,15 @@ description: "When executing instruction files. CRITICAL BLOCK: You MUST read th
 trigger: model_decision
 ---
 
-## Контекст выполнения
+## Execution Context
 
-Агент должен понимать контекст работы с паком при работе с инструкциями. Любые действия и решения агента должны соотноситься с целями, зафиксированными в инструкциях.
+The agent must understand the context of working with the pack when working with instructions. Any actions and decisions of the agent must align with the goals recorded in the instructions.
 
-## Обновление инструкций
+## Updating Instructions
 
-Работа агента и инструкции неразрывно связаны. Любые ключевые **решения** агента в процессе работы должны своевременно отражаться в инструкциях. 
+The agent's work and the instructions are inextricably linked. Any key **decisions** made by the agent during the process must be reflected in the instructions in a timely manner. 
 
-При принятии решений агент должен:
-1. Держать в голове формат работы с инструкциями.
-2. Приходить к обновлению соответствующих инструкций, если логика или архитектура проекта изменились.
-3. Документировать новые требования или соглашения, выработанные в процессе сессии.
+When making decisions, the agent must:
+1. Keep the instruction workflow format in mind.
+2. Update the corresponding instructions if the project's logic or architecture changes.
+3. Document new requirements or agreements established during the session.

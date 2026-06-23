@@ -3,28 +3,28 @@ name: impl-instrs:debug-feedback
 description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Explain, justify, and debug the execution and creation of implementation instructions. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
 ---
 
-# Дебаг и обратная связь (Debug and Feedback)
+# Debug and Feedback
 
-Используйте этот skill для анализа ошибок выполнения, несоответствий между кодом и инструкциями, а также для обоснования принятых решений.
+Use this skill to analyze execution errors, discrepancies between code and instructions, and to justify decisions made.
 
-## Когда Использовать
-* **Явный вызов оператором**: Когда пользователь запрашивает объяснение ("почему было сделано именно так?", "объясни логику решения", "почему возникла эта ошибка?").
-* **Реагирует на файлы инструкций**: При разборе ошибок в файлах инструкций или дебаге несоответствий в рабочей директории.
+## When to Use
+* **Explicit Operator Invocation**: When the user requests an explanation ("why was it done this way?", "explain the logic of the solution", "why did this error occur?").
+* **Reacts to Instruction Files**: When resolving errors in instruction files or debugging discrepancies in the working directory.
 
-## Когда Не Использовать
-* При обычном бесконфликтном написании кода или создании новых инструкций.
+## When Not to Use
+* During normal, conflict-free code writing or creation of new instructions.
 
-## Основные Правила
+## Core Rules
 
-### 1. Обоснование результатов
-* Агент должен быть способен объяснить, какая именно строка или раздел инструкции повлияли на принятое решение.
-* Ответы должны ссылаться на конкретные файлы инструкций через относительные пути.
+### 1. Justification of Results
+* The agent must be able to explain which specific line or section of the instruction influenced the decision made.
+* Answers must refer to specific instruction files using relative paths.
 
-### 2. Анализ сбоев
-* В случае ошибок компиляции или неверной работы кода, соотнесите проблему с инструкциями. Выявите, была ли инструкция двусмысленной, неполной или устаревшей.
-* Предложите точные формулировки для исправления инструкций, чтобы избежать подобных ошибок в будущем.
+### 2. Failure Analysis
+* In case of compilation errors or incorrect code operation, correlate the problem with the instructions. Identify whether the instruction was ambiguous, incomplete, or outdated.
+* Suggest precise formulations for fixing instructions to avoid similar errors in the future.
 
-### 3. Передача обратной связи через маркеры
-* При обнаружении рисков, нехватке контекста или необходимости дать пояснение к логике используйте сигнальные маркеры `[!...]` (например, `[!AI-QUESTION]`, `[!AI-WARNING]`, `[!AI-INFO]`).
-* Внедряйте маркеры напрямую в целевые файлы: в Markdown как прямой текст (`[!AI-INFO] ...`), в коде и конфигах — оборачивая в нативные комментарии (например, `// [!AI-WARNING] ...`).
-* Содержимое маркера должно строго касаться логики или текста инструкции. Запрещено вести диалог, не обращенный к инструкции.
+### 3. Passing Feedback via Markers
+* Upon detecting risks, lacking context, or needing to explain logic, use signal markers `[!...]` (e.g., `[!AI-QUESTION]`, `[!AI-WARNING]`, `[!AI-INFO]`).
+* Embed markers directly into the target files: in Markdown as direct text (`[!AI-INFO] ...`), in code and configs wrapped in native comments (e.g., `// [!AI-WARNING] ...`).
+* The content of the marker must strictly relate to the logic or text of the instruction. Conversing about anything other than the instruction is forbidden.

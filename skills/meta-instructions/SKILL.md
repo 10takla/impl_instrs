@@ -3,23 +3,23 @@ name: impl-instrs:meta-instructions
 description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Write meta-instructions that define guidelines and formats for other instructions. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
 ---
 
-# Мета-инструкции (Meta-Instructions)
+# Meta-Instructions
 
-Используйте этот skill для разработки и написания инструкций более высокого уровня — т.е. инструкций о том, как правильно создавать, валидировать и интерпретировать другие инструкции.
+Use this skill to design and write higher-level instructions—i.e., instructions on how to properly create, validate, and interpret other instructions.
 
-## Когда Использовать
-* **Явный вызов оператором**: Когда пользователь запрашивает создание правил написания промптов или шаблонов для инструкций.
-* **Реагирует на файлы инструкций**: При работе с правилами и стандартами инструкций в рабочей директории.
+## When to Use
+* **Explicit Operator Invocation**: When the user requests the creation of prompt writing rules or templates for instructions.
+* **Reacts to Instruction Files**: When working with rules and standards for instructions in the working directory.
 
-## Когда Не Использовать
-* При написании стандартных инструкций по разработке ПО (где нет уровней вложенности инструкций).
+## When Not to Use
+* When writing standard software development instructions (where there are no nested levels of instructions).
 
-## Основные Правила
+## Core Rules
 
-### 1. Форматирование мета-правил
-* При написании мета-инструкций четко разграничивайте уровни абстракции: используйте явные маркеры (например, "Инструкции для ИИ должны...", "Мета-правило: ...").
-* Убедитесь, что мета-инструкции ссылаются на принципы лаконичности и целевой полноты.
+### 1. Formatting Meta-Rules
+* When writing meta-instructions, clearly distinguish levels of abstraction: use explicit markers (e.g., "Instructions for AI must...", "Meta-rule: ...").
+* Ensure meta-instructions refer to the principles of conciseness and target completeness.
 
-### 2. Вложенные шаблоны и примеры
-* Предоставляйте четкие шаблоны структуры файлов инструкций.
-* Мета-инструкции должны быть понятны другим агентам, которые будут их читать в качестве руководства.
+### 2. Nested Templates and Examples
+* Provide clear templates for the structure of instruction files.
+* Meta-instructions must be understandable to other agents who will read them as a guide.

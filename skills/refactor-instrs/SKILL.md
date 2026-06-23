@@ -3,24 +3,24 @@ name: impl-instrs:refactor-instrs
 description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Refactor instruction files to optimize their structure, formatting, and relations while preserving their core semantics. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
 ---
 
-# Рефакторинг инструкций (Refactoring Instructions)
+# Refactoring Instructions
 
-Используйте этот skill для оптимизации, упрощения или реструктуризации существующих файлов инструкций без изменения их конечного смысла (семантики).
+Use this skill to optimize, simplify, or restructure existing instruction files without changing their ultimate meaning (semantics).
 
-## Когда Использовать
-* **Явный вызов оператором**: Когда пользователь просит отрефакторить, почистить или структурировать инструкции.
-* **Реагирует на файлы инструкций**: При работе с файлами инструкций в рабочей директории.
+## When to Use
+* **Explicit Operator Invocation**: When the user asks to refactor, clean up, or structure instructions.
+* **Reacts to Instruction Files**: When working with instruction files in the working directory.
 
-## Когда Не Использовать
-* Когда требуется изменить функциональные требования проекта (в этом случае применяется инкрементальное обновление).
+## When Not to Use
+* When it is necessary to change the functional requirements of the project (in this case, incremental update is applied).
 
-## Основные Правила
+## Core Rules
 
-### 1. Сохранение семантики
-* Главная цель — сделать инструкции более понятными и эффективными для ИИ, не меняя при этом конечные требования к результату.
-* Убирайте дублирование, расплывчатые формулировки и словесную "воду".
+### 1. Preserving Semantics
+* The main goal is to make instructions more understandable and efficient for the AI without changing the final requirements for the result.
+* Remove duplication, vague formulations, and verbal "fluff".
 
-### 2. Организация структуры и навигации
-* Группируйте связанные инструкции. Если файл инструкции становится слишком большим (более 12 000 символов), разделите его на логические части.
-* Проверьте и оптимизируйте сеть гиперссылок между инструкциями для обеспечения графовой навигации (правило [impl-instrs-workspace.md](../../rules/impl-instrs-workspace.md)).
-* Убедитесь, что все относительные пути корректны и не выходят за границы рабочей директории.
+### 2. Organizing Structure and Navigation
+* Group related instructions. If an instruction file becomes too large (more than 12,000 characters), split it into logical parts.
+* Verify and optimize the network of hyperlinks between instructions to ensure graph navigation (rule [impl-instrs-workspace.md](<../../rules/impl-instrs-workspace.md>)).
+* Ensure all relative paths are correct and do not exceed the boundaries of the working directory.

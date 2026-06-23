@@ -3,24 +3,24 @@ name: impl-instrs:simultaneous-update-instrs-result
 description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Simultaneously update code/implementation results and the corresponding instruction files to keep them synchronized. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
 ---
 
-# Одновременное обновление инструкций и результата (Simultaneous Update of Instructions and Result)
+# Simultaneous Update of Instructions and Result
 
-Используйте этот skill для синхронного изменения кода и инструкций, чтобы реализация никогда не расходилась с ее описанием.
+Use this skill to synchronously modify code and instructions so that the implementation never diverges from its description.
 
-## Когда Использовать
-* **Реагирует на файлы инструкций**: При внесении изменений в проект, затрагивающих как файлы реализации (код), так и файлы инструкций (`.md`).
+## When to Use
+* **Reacts to Instruction Files**: When making changes to the project that affect both implementation files (code) and instruction files (`.md`).
 
-## Когда Не Использовать
-* При изменении только документации без изменения кода.
-* При рефакторинге кода без изменения его внешнего поведения и логики.
+## When Not to Use
+* When changing only documentation without changing the code.
+* When refactoring code without changing its external behavior and logic.
 
-## Основные Правила
+## Core Rules
 
-### 1. Соблюдение контекста выполнения
-* Применяйте правило [impl-instrs-execution-context.md](../../rules/impl-instrs-execution-context.md).
-* Перед тем как написать рабочий код или отредактировать файлы, убедитесь, что планируемое поведение описано в файлах инструкций.
-* Не разделяйте эти фазы во времени: если вы обновляете код, обновите и инструкцию в той же итерации (или даже в том же запросе).
+### 1. Compliance with Execution Context
+* Apply the rule [impl-instrs-execution-context.md](<../../rules/impl-instrs-execution-context.md>).
+* Before writing working code or editing files, ensure that the planned behavior is described in the instruction files.
+* Do not separate these phases in time: if you update the code, update the instruction in the same iteration (or even in the same request).
 
-### 2. Синхронное обновление
-* Любая правка кода (исправление бага, добавление фичи) должна зеркально отражаться в инструкции.
-* Если в процессе кодинга вы поняли, что первоначальная инструкция была неполной или ошибочной, обновите инструкцию, а затем приведите код в соответствие с ней.
+### 2. Synchronous Update
+* Any code edit (bug fix, feature addition) must be mirrored in the instruction.
+* If you realize during coding that the initial instruction was incomplete or erroneous, update the instruction, and then bring the code into alignment with it.

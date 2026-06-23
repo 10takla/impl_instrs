@@ -3,36 +3,36 @@ name: impl-instrs:instrs-write
 description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Formulate and initialize implementation instruction files (prompts) using a structured functional format. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
 ---
 
-# Формирование промптов (Prompt Formulation)
+# Prompt Formulation
 
-Используйте этот skill для создания начальных файлов инструкций и промптов, а также для их базовой инициализации.
+Use this skill to create initial instruction files and prompts, as well as for their basic initialization.
 
-## Когда Использовать
-* **Явный вызов оператором**: Когда пользователь запрашивает создание новой инструкции или инициализацию промптов.
-* **Реагирует на файлы инструкций**: 
-  - При создании/инициализации новых файлов инструкций.
-  - При необходимости инкрементально обновить логику работы или код на основе изменений требований, зафиксированных в файлах инструкций.
+## When to Use
+* **Explicit Operator Invocation**: When the user requests the creation of a new instruction or prompt initialization.
+* **Reacts to Instruction Files**: 
+  - When creating/initializing new instruction files.
+  - When there is a need to incrementally update execution logic or code based on requirement changes captured in the instruction files.
 
-## Когда Не Использовать
-* Для повседневных или мелких изменений в коде без необходимости создания/изменения формальной структуры инструкций.
-* При первой инициализации проекта или полной переписке всего кода с нуля (для задач инкрементального обновления).
+## When Not to Use
+* For everyday or minor code changes without the need to create/modify a formal instruction structure.
+* During the first project initialization or complete rewrite of all code from scratch (for incremental update tasks).
 
-## Основные Правила
+## Core Rules
 
-### 1. Соблюдение стиля
-* Следуйте правилу [impl-instrs-instruction-style.md](../../rules/impl-instrs-instruction-style.md).
-* Применяйте принцип **целевой (субъективной) полноты** и **лаконичности**. Не пишите лишнего бойлерплейта.
+### 1. Style Compliance
+* Follow the rule [impl-instrs-instruction-style.md](<../../rules/impl-instrs-instruction-style.md>).
+* Apply the principle of **target (subjective) completeness** and **conciseness**. Do not write redundant boilerplate.
 
-### 2. Оптимизация и графовая навигация
-* Каждая созданная markdown-инструкция должна содержать относительную ссылку на родительский файл инструкции или на главный [README.md](../../README.md).
-* Это обеспечивает быструю навигацию по ссылкам без сканирования файловой структуры.
+### 2. Optimization and Graph Navigation
+* Each created Markdown instruction must contain a relative link to the parent instruction file or the main [README.md](<../../README.md>).
+* This provides quick link navigation without scanning the file system structure.
 
-### 3. Инкрементальное обновление реализации
-* **Анализ текущего состояния**: Сравните текущую реализацию с новыми требованиями. Выявите дельту (разницу). Не перезаписывайте файлы целиком, если можно внести изменения локально (через точечную замену). Это существенно экономит токены и снижает риск регрессии.
-* **Пошаговые изменения**: Применяйте изменения последовательно. Отражайте каждый шаг в файле инструкций (или файле задач `task.md`), чтобы контролировать ход выполнения. Убедитесь, что промежуточные состояния проекта остаются работоспособными или быстро тестируемыми.
+### 3. Incremental Implementation Updates
+* **Current State Analysis**: Compare the current implementation with the new requirements. Identify the delta (difference). Do not rewrite files entirely if changes can be made locally (via precise replacement). This significantly saves tokens and reduces the risk of regression.
+* **Step-by-Step Changes**: Apply changes sequentially. Reflect each step in the instruction file (or the task file `task.md`) to control execution progress. Ensure intermediate project states remain functional or quickly testable.
 
-### 4. Плейсхолдеры и маркеры обратной связи
-При формировании инструкций используйте инструмент двусторонней мета-коммуникации:
-* **Делегирование (`{{...}}`)**: Раскрывайте плейсхолдеры `{{...}}`, заменяя их результатом выполнения инструкции внутри скобок. Органично вписывайте результат в контекст файла.
-* **Обратная связь (`[!...]`)**: Используйте сигнальные маркеры (например, `[!AI-QUESTION]`, `[!AI-WARNING]`, `[!AI-INFO]`) для передачи статусов, сообщений и запросов уточнения напрямую в целевом файле.
-* **Формат маркеров обратной связи**: В Markdown (`.md`, `.txt`) пишите напрямую `[!...]`. В коде оборачивайте в нативные комментарии (`// [!...]`, `# [!...]`, `<!-- [!... ] -->` и т.д.). Диалог, не касающийся напрямую логики/текста инструкции, запрещен.
+### 4. Placeholders and Feedback Markers
+Use the two-way meta-communication tool when formulating instructions:
+* **Delegation (`{{...}}`)**: Resolve `{{...}}` placeholders, replacing them with the execution result of the instruction inside the brackets. Integrate the result organically into the file context.
+* **Feedback (`[!...]`)**: Use signal markers (e.g., `[!AI-QUESTION]`, `[!AI-WARNING]`, `[!AI-INFO]`) to pass statuses, messages, and clarification requests directly in the target file.
+* **Feedback Marker Format**: In Markdown (`.md`, `.txt`), write `[!...]` directly. In code, wrap in native comments (e.g., `// [!...]`, `# [!...]`, `<!-- [!... ] -->`, etc.). Conversation that does not directly concern the logic/text of the instruction is forbidden.

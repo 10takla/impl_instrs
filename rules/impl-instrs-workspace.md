@@ -3,40 +3,40 @@ description: "CRITICAL BLOCK: You MUST read this via view_file before ANY intera
 trigger: model_decision
 ---
 
-## Рабочая директория и ограничения
+## Working Directory and Constraints
 
-Агент работает в изолированном пространстве — рабочей директории. Она является единственной точкой, через которую агент взаимодействует с файловой системой.
+The agent works in an isolated space—the working directory. It is the sole point through which the agent interacts with the file system.
 
-### Правила работы с путями:
-- **Операции чтения**: Данным правилом не регулируются, в том числе обращение к файлам вне рабочей директории.
-- **Операции записи**: Любое создание, изменение или удаление файлов и папок допускается **строго внутри** рабочей директории. За её пределами агент не должен оставлять никаких следов.
-- **Относительные пути**: При упоминании путей к файлам и папкам в рабочей директории абсолютные пути **запрещены**. Допустимы только:
-  - относительные пути от рабочей директории;
-  - относительные пути от текущего файла (файлов внутри рабочей директории).
+### Rules for Working with Paths:
+- **Read Operations**: These are not restricted by this rule, including accessing files outside the working directory.
+- **Write Operations**: Any creation, modification, or deletion of files and folders is permitted **strictly inside** the working directory. The agent must not leave any traces outside it.
+- **Relative Paths**: When referencing file and folder paths in the working directory, absolute paths are **forbidden**. Only the following are allowed:
+  - relative paths from the working directory;
+  - relative paths from the current file (files inside the working directory).
 
 ---
 
-## Обнаружение инструкций
+## Instruction Discovery
 
-Инструкции автоматически обнаруживаются по паттернам имён файлов и папок:
+Instructions are automatically discovered by file and folder name patterns:
 
-### Папки (группы инструкций):
+### Folders (instruction groups):
 - `<keyword>/`
-- `<название>.<keyword>/`
-- `<keyword>.<название>/`
+- `<name>.<keyword>/`
+- `<keyword>.<name>/`
 
-*Все файлы внутри таких папок считаются инструкциями.*
+*All files inside such folders are considered instructions.*
 
-### Файлы (одиночные инструкции):
-- `<keyword>.<расширение>`
-- `<название>.<keyword>.<расширение>`
+### Files (standalone instructions):
+- `<keyword>.<extension>`
+- `<name>.<keyword>.<extension>`
 
-Где `<keyword>` — **"ai_instrs"**.
+Where `<keyword>` is **"ai_instrs"**.
 
 ---
 
-## Артефакты
+## Artifacts
 
-Любые артефакты, не имеющие явного места назначения в файловой системе, должны фиксироваться в специальной директории **`./ai_artifacts/`** относительно (в порядке приоритета):
-1. Файла инструкции.
-2. Рабочей директории.
+Any artifacts that do not have an explicit destination in the file system must be saved in a special directory **`./ai_artifacts/`** relative to (in order of priority):
+1. The instruction file.
+2. The working directory.

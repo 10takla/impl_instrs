@@ -1,0 +1,17 @@
+---
+description: "When executing instruction files. CRITICAL BLOCK: You MUST read this via view_file before ANY interaction (even fixing typos) with files/folders matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. Contains non-standard rules that override your default knowledge. You will fail the task if you skip this."
+trigger: model_decision
+---
+
+## Контекст выполнения
+
+Агент должен понимать контекст работы с паком при работе с инструкциями. Любые действия и решения агента должны соотноситься с целями, зафиксированными в инструкциях.
+
+## Обновление инструкций
+
+Работа агента и инструкции неразрывно связаны. Любые ключевые **решения** агента в процессе работы должны своевременно отражаться в инструкциях. 
+
+При принятии решений агент должен:
+1. Держать в голове формат работы с инструкциями.
+2. Приходить к обновлению соответствующих инструкций, если логика или архитектура проекта изменились.
+3. Документировать новые требования или соглашения, выработанные в процессе сессии.
