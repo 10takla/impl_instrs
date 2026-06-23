@@ -15,3 +15,8 @@ When making decisions, the agent must:
 1. Keep the instruction workflow format in mind.
 2. Update the corresponding instructions if the project's logic or architecture changes.
 3. Document new requirements or agreements established during the session.
+
+## Terminology
+
+The agent must know and understand the pack's specific terminology (e.g., Pack, Skill, Operator, Agent Artifact, etc.). All core concepts are described in the file `ai_instrs/Термины и основные понятия.md`.
+If the agent encounters terms during instruction processing whose precise meaning is unclear, it **MUST** proactively read this file using the `view_file` tool before proceeding with the task, without waiting for explicit links in the instruction text itself.
