@@ -24,3 +24,7 @@ Use this skill to optimize, simplify, or restructure existing instruction files 
 * Group related instructions. If an instruction file becomes too large (more than 12,000 characters), split it into logical parts.
 * Verify and optimize the network of hyperlinks between instructions to ensure graph navigation.
 * Ensure all relative paths are correct and do not exceed the boundaries of the working directory.
+
+### 3. Context Isolation
+* **Contextual Splitting**: When refactoring, identify instructions where disparate complex tasks are mixed (causing context pollution). Split these into separate, highly focused instruction files.
+* **Avoid Mechanical Splitting**: Do not split simple subtasks unnecessarily; only split when the detailed steps of one task distract from another, requiring them to be executed in clean, separate contexts.

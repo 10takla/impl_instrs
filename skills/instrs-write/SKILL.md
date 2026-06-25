@@ -31,7 +31,11 @@ Use this skill to create initial instruction files and prompts, as well as for t
 * **Current State Analysis**: Compare the current implementation with the new requirements. Identify the delta (difference). Do not rewrite files entirely if changes can be made locally (via precise replacement). This significantly saves tokens and reduces the risk of regression.
 * **Step-by-Step Changes**: Apply changes sequentially. Reflect each step in the instruction file (or the task file `task.md`) to control execution progress. Ensure intermediate project states remain functional or quickly testable.
 
-### 3. Placeholders and Feedback Markers
+### 4. Context Isolation
+* **Prevent Context Pollution**: Do not mechanically divide tasks. Split tasks into separate instruction files if their detailed descriptions conflict and cause context pollution (e.g., deep research vs. complex coding).
+* **Isolated Execution**: Formulate these separate instructions so the operator can feed them to the agent sequentially, allowing the agent to complete each step in a clean, focused context.
+
+### 5. Placeholders and Feedback Markers
 Use the two-way meta-communication tool when formulating instructions:
 * **Delegation (`{{...}}`)**: Resolve `{{...}}` placeholders, replacing them with the execution result of the instruction inside the brackets. Integrate the result organically into the file context.
 * **Feedback (`[!...]`)**: Use signal markers (e.g., `[!AI-QUESTION]`, `[!AI-WARNING]`, `[!AI-INFO]`) to pass statuses, messages, and clarification requests directly in the target file.
