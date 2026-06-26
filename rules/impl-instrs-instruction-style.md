@@ -22,6 +22,14 @@ If completeness accounts for the quantity of necessary thoughts, then concisenes
 
 The ideal prompt is when you have detailed and completely conveyed the entire volume of your thoughts and desires (target completeness), but done so using the most clear, precise, and short formulations (conciseness).
 
+### Level of Generalization
+
+The rule formulation must be generalized to the exact level of the instruction itself. The specific case from which the rule originated should not narrow the formulation below the instruction's level, nor should it be abstracted higher.
+
+Errors on both sides:
+- **Over-specification**: a general rule is formulated in the language of a single specific case, losing applicability to others.
+- **Over-abstraction**: a rule within a specific instruction abstracts away from its subject, becoming vague.
+
 ---
 
 ## Patterns
