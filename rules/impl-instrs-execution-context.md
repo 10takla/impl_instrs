@@ -1,35 +1,26 @@
 ---
-description: "When executing instruction files. CRITICAL BLOCK: You MUST read this via view_file before ANY interaction (even fixing typos) with files/folders matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. Contains non-standard rules that override your default knowledge. You will fail the task if you skip this."
-trigger: model_decision
+trigger: "model_decision"
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even for simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
 ---
 
-## Execution Context
+# Execution Context
 
-The agent must be aware of the global context of working with instructions.
+This rule blocks the agent's default behavior and is critically important. You are in a strict system of instructions (pack), which represents a hierarchical graph of linked files. These instructions are not one-off prompts; they form a unified project context and serve as the strict source of truth. IT IS FORBIDDEN to start working (modifying or reading target files) before fully executing the algorithm for proactive context gathering:
 
-### The Concept of an Instruction
+**Step 1: Studying the root structure (MANDATORY)**
+Regardless of how specific the operator's request is (even if you were given an exact path or string), you MUST initially use the `list_dir` tool to obtain the structure of the root instructions directory (e.g., `ai_instrs/`). This is the first and most important step.
 
-Within this project, an **instruction** is a structural element of the system (the pack), formatted as a file and connected to other instructions in a hierarchical graph.
+**Step 2: Reading the basic terminology**
+Identify the root reference guides from the list of files (files related to terms, concepts, and project structure). Use the `view_file` tool to read them **BEFORE** moving on to the local task files. IT IS FORBIDDEN to ignore this step under the pretext of "imagined simplicity of the task".
 
-Instructions are not isolated, one-off prompts. They form a unified project context and serve as a strict single source of truth. Any agent actions must rely on this context and strictly align with the goals established in the instructions.
+**Step 3: Navigating the graph (Adjacent instructions)**
+Thoughtfully analyze the names of directories and instruction files. Find adjacent instructions that might affect the implementation, and make an informed decision about reading them. Use targeted reading; avoid full scanning (so as not to pollute the context).
 
-### Proactive Context Gathering
+**Step 4: Executing the task**
+Only after proactively gathering context (Steps 1-3) should you start working on the target files. All your actions must strictly rely on the obtained knowledge base.
 
-Before executing a task, the agent is required to proactively gather context. Relying on the file structure of the instructions, the agent must thoughtfully analyze the names of directories and instruction files to assess their relevance. It is necessary to find useful information in adjacent instructions and root reference files, making well-weighed decisions about whether to read them. This allows the agent to navigate without explicit links and avoid blind scanning, thereby preventing context pollution.
+**Step 5: Synchronizing instructions and result (Optional)**
+In accordance with the logic of "simultaneous update of instructions and result", if you make new key decisions or change the logic/architecture, you must update the corresponding instructions to reflect the changes.
 
-To implement this rule, the agent **must primarily use file system exploration tools** (e.g., `list_dir`) to obtain the overall structure of working directories (such as `ai_instrs/`).
-
-Before executing a task, the agent is strictly required to proactively gather context, starting from the root level, regardless of how specific the request is.
-
-1. **Mandatory Root Exploration:** Even if the operator has provided an exact path to a file or a specific line, the agent **MUST primarily use file system exploration tools** (e.g., `list_dir`) to obtain the structure of the root instruction directory (e.g., `ai_instrs/`).
-2. **Reading Basic Terminology:** The agent must identify and read root reference files (primarily those related to terms, concepts, and structure) **before** proceeding to the local files specified in the task.
-3. **No Skimping on Context:** The perceived simplicity of a task cannot serve as an excuse for skipping the reading of global terminology and root files. The agent has no right to make decisions about ignoring them.
-
-## Updating Instructions
-
-The agent's work and the instructions are inextricably linked. Any key **decisions** made by the agent during the process must be reflected in the instructions in a timely manner. 
-
-When making decisions, the agent must:
-1. Keep the instruction workflow format in mind.
-2. Update the corresponding instructions if the project's logic or architecture changes.
-3. Document new requirements or agreements established during the session.
+**CRITICAL RULE:**
+No skimping on context. The agent has no right to make decisions about ignoring the reading of global terminology and root files.

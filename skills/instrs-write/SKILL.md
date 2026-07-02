@@ -1,42 +1,48 @@
 ---
-name: impl-instrs:instrs-write
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Formulate and initialize implementation instruction files (prompts) using a structured functional format. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
+name: "impl-instrs:instrs-write"
+description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via slash command. Algorithm for formulating and isolating prompts (instructions). Triggers on interaction with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
+trigger: model_decision
 ---
 
-# Prompt Formulation
+# Algorithm for the "Prompt Formulation" (instrs-write) Skill
 
-Use this skill to create initial instruction files and prompts, as well as for their basic initialization.
+You are in the instruction formulation mode. Your task is to transform the operator's business requirements into formalized instructions (prompts), strictly following the imperative algorithm described below.
 
-## When to Use
-* **Explicit Operator Invocation**: When the user requests the creation of a new instruction or prompt initialization.
-* **Reacts to Instruction Files**: 
-  - When creating/initializing new instruction files.
-  - When there is a need to incrementally update execution logic or code based on requirement changes captured in the instruction files.
+## 1. Design and Context Isolation Phase
+**Input:** Operator's request to create or update an instruction.
 
-## When Not to Use
-* For everyday or minor code changes without the need to create/modify a formal instruction structure.
-* During the first project initialization or complete rewrite of all code from scratch (for incremental update tasks).
+1. **Analyze the task** for the presence of conflicting contexts. (For example, simultaneously describing in detail a deep analysis algorithm and a database structure are two different contexts that will interfere with each other).
+2. **IF** the task contains heterogeneous and complex stages, **THEN**:
+   - Divide the task into several independent instructions.
+   - Design each instruction so that it solves only one focused stage to prevent context pollution.
+   - Inform the operator: "The task is divided into instructions A and B. I recommend executing instruction A in an isolated context, and only then proceeding to B."
+3. **ELSE**: Proceed to the next phase.
 
-## Core Rules
+## 2. Incremental Update Phase (during editing)
+**Input:** An existing instruction and new requirements.
 
-### 1. Style Compliance
-* Follow the rule [impl-instrs-instruction-style.md](<../../rules/impl-instrs-instruction-style.md>).
-* Apply the principle of **target (subjective) completeness** and **conciseness**. Do not write redundant boilerplate.
+1. **Assess the current state** of the instruction and its associated implementation in the codebase.
+2. **Formulate changes incrementally** — strictly relative to the previous state.
+3. **Minimize overwriting:** Do not rewrite the entire instruction or code if changes concern only a single block. Keep in mind that the operator iteratively changes instructions directly in the file system, so save tokens and update only the delta.
 
-### 2. Optimization and Graph Navigation
-* Each created Markdown instruction must contain a relative link to the parent instruction file.
-* This provides quick link navigation without scanning the file system structure.
+## 3. Two-Way Meta-Communication Phase (Markers)
+When generating instruction content, use a strict system of placeholders (markers) for meta-communication. **CRITICALLY IMPORTANT:** Any communication, requests for clarification, or status reporting must occur via these markers directly within the text of the instruction files, rather than in free-form dialogue.
 
-### 3. Incremental Implementation Updates
-* **Current State Analysis**: Compare the current implementation with the new requirements. Identify the delta (difference). Do not rewrite files entirely if changes can be made locally (via precise replacement). This significantly saves tokens and reduces the risk of regression.
-* **Step-by-Step Changes**: Apply changes sequentially. Reflect each step in the instruction file (or the task file `task.md`) to control execution progress. Ensure intermediate project states remain functional or quickly testable.
+1. **Processing operator delegations:**
+   - Find all markers of the form `{{...}}` in the text.
+   - Execute the task described inside the braces, and replace this placeholder with the result, integrating it organically into the surrounding context.
+2. **Feedback to the operator:**
+   - If you lack context to accurately formulate the instruction, or if you identify risks, insert a `[!...]` marker into the text.
+   - Use task-appropriate tags: `[!AI-QUESTION]`, `[!AI-WARNING]`, `[!AI-INFO]`.
+   - Wrap the marker in a native comment for the file's target language. Examples:
+     - Markdown / Text: `[!AI-QUESTION] Why was this specific approach chosen?`
+     - JS / TS / C-like: `// [!AI-WARNING] Security violation risk.`
+     - Python / Bash: `# [!AI-INFO] Instruction adapted.`
+     - HTML: `<!-- [!AI-QUESTION] Clarify the class? -->`
 
-### 4. Context Isolation
-* **Prevent Context Pollution**: Do not mechanically divide tasks. Split tasks into separate instruction files if their detailed descriptions conflict and cause context pollution (e.g., deep research vs. complex coding).
-* **Isolated Execution**: Formulate these separate instructions so the operator can feed them to the agent sequentially, allowing the agent to complete each step in a clean, focused context.
-
-### 5. Placeholders and Feedback Markers
-Use the two-way meta-communication tool when formulating instructions:
-* **Delegation (`{{...}}`)**: Resolve `{{...}}` placeholders, replacing them with the execution result of the instruction inside the brackets. Integrate the result organically into the file context.
-* **Feedback (`[!...]`)**: Use signal markers (e.g., `[!AI-QUESTION]`, `[!AI-WARNING]`, `[!AI-INFO]`) to pass statuses, messages, and clarification requests directly in the target file.
-* **Feedback Marker Format**: In Markdown (`.md`, `.txt`), write `[!...]` directly. In code, wrap in native comments (e.g., `// [!...]`, `# [!...]`, `<!-- [!... ] -->`, etc.). Conversation that does not directly concern the logic/text of the instruction is forbidden.
+## 4. Saving and File System Interaction Phase
+1. **Write the result** to the working directory.
+2. **Check naming:** Ensure that the name of the created file or folder matches the instruction detection patterns:
+   - Folders: `ai_instrs/`, `*.ai_instrs/`, `ai_instrs.*/`
+   - Files: `ai_instrs.*`, `*.ai_instrs.*`
+3. **Handling side-effect files:** Any generated artifacts, scripts, reports, or other files for which no specific saving location is indicated in the instruction must be saved **strictly** in the `ai_artifacts/` directory (the path is built relative to the instruction file or the working directory).

@@ -1,5 +1,5 @@
 ---
-name: short-answer
+name: "impl-instrs:short-answer"
 description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Add a short concise summary at the end of detailed responses."
 ---
 

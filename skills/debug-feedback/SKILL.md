@@ -1,30 +1,42 @@
 ---
-name: impl-instrs:debug-feedback
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Explain, justify, and debug the execution and creation of implementation instructions. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
+name: "impl-instrs:debug-feedback"
+description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via slash command. Justification of the execution result and instruction formation. CRITICAL BLOCK: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
 ---
 
 # Debug and Feedback
 
-Use this skill to analyze execution errors, discrepancies between code and instructions, and to justify decisions made.
+This skill is designed for step-by-step justification of the agent's decisions, providing feedback, and finding errors (debugging) in the processes of **execution** and **formation** of instruction files.
 
-## When to Use
-* **Explicit Operator Invocation**: When the user requests an explanation ("why was it done this way?", "explain the logic of the solution", "why did this error occur?").
-* **Reacts to Instruction Files**: When resolving errors in instruction files or debugging discrepancies in the working directory.
+## Execution Algorithm
 
-## When Not to Use
-* During normal, conflict-free code writing or creation of new instructions.
+When explicitly invoked by the operator, strictly perform the following steps in the specified order:
 
-## Core Rules
+### Step 1: Initialization and Context Gathering
+1. Analyze the operator's request and determine the subject of debugging: the process of *execution* of existing instructions or the process of *formation* (creation/updating) of instructions.
+2. Use `list_dir` to scan the working directory of instructions (including the `ai_instrs/` folder and its contents).
+3. Read the root rules and terminology files related to the subject of the request (using `view_file`), before accessing local files and drawing conclusions. This is a critical requirement to prevent context loss.
 
-### 1. Justification of Results
-* The agent must be able to explain which specific line or section of the instruction influenced the decision made.
-* Answers must refer to specific instruction files using relative paths.
+### Step 2: Conducting Checks
 
-### 2. Failure Analysis
-* In case of compilation errors or incorrect code operation, correlate the problem with the instructions. Identify whether the instruction was ambiguous, incomplete, or outdated.
-* Suggest precise formulations for fixing instructions to avoid similar errors in the future.
+**If the subject is Instruction Execution:**
+1. Read the target instruction file and the source code (or artifact) that was generated according to this instruction.
+2. Inspect your own reasoning/thoughts (thinking log) during the execution of the task. Your goal is to understand exactly how the current phrasing of the instructions led the agent to an undesirable result.
+3. Analyze the instruction files themselves to determine exactly where they were inaccurate, ambiguous, or flawed (which caused the faulty logic).
+4. Document all identified shortcomings in the instructions: absence of crucial constraints, abstract concepts instead of strict steps, contradictions, or lack of context.
 
-### 3. Passing Feedback via Markers
-* Upon detecting risks, lacking context, or needing to explain logic, use signal markers `[!...]` (e.g., `[!AI-QUESTION]`, `[!AI-WARNING]`, `[!AI-INFO]`).
-* Embed markers directly into the target files: in Markdown as direct text (`[!AI-INFO] ...`), in code and configs wrapped in native comments (e.g., `// [!AI-WARNING] ...`).
-* The content of the marker must strictly relate to the logic or text of the instruction. Conversing about anything other than the instruction is forbidden.
+**If the subject is Instruction Formation:**
+1. Read the generated instruction text.
+2. Check the structure: whether formatting rules, completeness, and conciseness are followed.
+3. Check for the presence of abstract philosophical concepts instead of strict imperative steps. Document these as critical errors.
+4. Ensure there are no violations of basic prompt writing rules (redundant positive phrasing, incorrect level of generalization).
+
+### Step 3: Generating Error Report and Proposals
+1. Form a structured report for the operator.
+2. **Justification of Instruction Vulnerability:** Based on the analysis of your reasoning, explain why the instructions led the agent to an erroneous result (for example, "the instruction contains a contradictory requirement", "the constraint was described too abstractly, allowing it to be ignored").
+3. Rely only on facts from the file system. Provide exact links to files in the format `[name](<relative/path/to/file.md>)`.
+4. **Proposals for Instruction Correction:** Provide specific text to correct the problematic instructions (translating abstract rules into clear steps, adding new negative prompts, etc.). IT IS STRICTLY FORBIDDEN to make modifications independently — only propose them to the operator as text insertions (code snippets or diff blocks).
+
+## Strict Constraints
+- It is STRICTLY FORBIDDEN to modify any files in the workspace or perform code corrections during the debugging process. The agent is only permitted to read, analyze, and generate a text report with justifications and a plan.
+- It is prohibited to use general phrases or assume system behavior without confirmation by facts from logs or instruction files.
+- Any claim of violation must be accompanied by a link to a specific rule described in the official instructions (for example, rules of style, execution context, or workspace restrictions).

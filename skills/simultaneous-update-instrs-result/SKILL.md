@@ -1,26 +1,27 @@
 ---
-name: impl-instrs:simultaneous-update-instrs-result
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Simultaneously update code/implementation results and the corresponding instruction files to keep them synchronized. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
+name: "impl-instrs:simultaneous-update-instrs-result"
+description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Simultaneous update of instructions and the result. CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even for simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
 ---
 
 # Simultaneous Update of Instructions and Result
 
-Use this skill to synchronously modify code and instructions so that the implementation never diverges from its description.
+## Concept
+Any agent decisions made during the modification of source code or other implementation results must be immediately reflected in the instruction files. The instructions form a unified project context and act as a strict source of truth. The agent is obliged to maintain the code and instructions in a fully synchronized state.
 
-## When to Use
-* **Reacts to Instruction Files**: When making changes to the project that affect both implementation files (code) and instruction files (`.md`).
+## Mandatory Step-by-Step Algorithm
 
-## When Not to Use
-* When changing only documentation without changing the code.
-* When refactoring code without changing its external behavior and logic.
+You must strictly adhere to the following sequence of actions for every invocation:
 
-## Core Rules
+**Step 1: Obtain Global Context.** Before starting any changes, use the `list_dir` tool to explore the root directory of the instructions (e.g., `ai_instrs/`). This action is mandatory, even if the operator provided exact paths. Do not skimp on context.
 
-### 1. Compliance with Execution Context
-* Apply the rule [impl-instrs-execution-context.md](<../../rules/impl-instrs-execution-context.md>).
-* Before writing working code or editing files, ensure that the planned behavior is described in the instruction files.
-* Do not separate these phases in time: if you update the code, update the instruction in the same iteration (or even in the same request).
+**Step 2: Read Base Terminology.** Based on the obtained directory tree, find and read the root reference files (glossaries, general rules, structures). Do this before proceeding to the local task files.
 
-### 2. Synchronous Update
-* Any code edit (bug fix, feature addition) must be mirrored in the instruction.
-* If you realize during coding that the initial instruction was incomplete or erroneous, update the instruction, and then bring the code into alignment with it.
+**Step 3: Study Target Files.** Read the target instruction files affected by the current task, as well as related instructions discovered in Steps 1 and 2.
+
+**Step 4: Make Changes to the Result.** Complete the assigned task by modifying the target source code or other implementation artifact.
+
+**Step 5: Analyze the Decisions Made.** Formulate for yourself what new decisions, approaches, or architectural nuances were applied when modifying the code in Step 4.
+
+**Step 6: Update Instructions.** Immediately edit the relevant instruction files so that they accurately describe the current state of the implementation and include the decisions identified in Step 5. Update the instructions simultaneously with the code changes.
+
+**Step 7: Final Validation.** Ensure that the updated code and updated instructions do not contradict the global context (Step 2) and form a single, consistent system.
