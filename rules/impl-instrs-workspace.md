@@ -1,5 +1,5 @@
 ---
-description: "Activates when performing any write operations in the file system (creation, modification, deletion), formatting file paths, searching for ai_instrs instructions, or saving artifacts."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even for simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
 trigger: model_decision
 ---
 
