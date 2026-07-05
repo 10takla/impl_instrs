@@ -1,0 +1,6 @@
+{
+  "name": "impl-instrs",
+  "version": "1.0.0",
+  "description": "A collection of rules and skills for working with instruction files in the workspace.",
+  "skills": "./skills/"
+}
