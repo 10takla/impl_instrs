@@ -28,3 +28,8 @@ For each formulated rule, check its level of abstraction:
 2. If the risk is high, add a strict negative prompt (prohibition) as a boundary of what is allowed.
 3. IT IS FORBIDDEN to duplicate the same meaning in both a positive and negative way (this wastes tokens).
 4. If strict control is not required, use neutral notifications instead of directive prompts.
+
+## STEP 5: Use Imperative Style
+1. Formulate all instructions in the imperative mood (e.g., "Execute...", "Write...", "Verify...").
+2. Avoid neutral or descriptive constructions like "You need to execute..." or "It is recommended to check...".
+
