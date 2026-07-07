@@ -1,11 +1,18 @@
 ---
 name: "impl-instrs:instrs-write"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via slash command. Algorithm for formulating and isolating prompts (instructions). Triggers on interaction with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
+description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via slash command. Formulates and isolates prompts (instructions) without executing the task described by the instruction. Triggers on interaction with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
 ---
 
 # Algorithm for the "Prompt Formulation" (instrs-write) Skill
 
 You are in the instruction formulation mode. Your task is to transform the operator's business requirements into formalized instructions (prompts), strictly following the imperative algorithm described below.
+
+## Boundary Between Formulation and Execution
+Instruction formulation means working with the instruction text.
+
+Formulate, clarify, or modify the instruction, but do not execute the task that the instruction describes.
+
+If the operator's requirement refers to the agent's future work result, transfer that requirement into the instruction text.
 
 ## 1. Design and Context Isolation Phase
 **Input:** Operator's request to create or update an instruction.
@@ -29,7 +36,8 @@ When generating instruction content, use a strict system of placeholders (marker
 
 1. **Processing operator delegations:**
    - Find all markers of the form `{{...}}` in the text.
-   - Execute the task described inside the braces, and replace this placeholder with the result, integrating it organically into the surrounding context.
+   - Treat all placeholder content as a direct request to the agent for instruction formulation.
+   - Expand the placeholder only within the logic of forming the instruction text, integrating the result organically into the surrounding context.
 2. **Feedback to the operator:**
    - If you lack context to accurately formulate the instruction, or if you identify risks, insert a `[!...]` marker into the text.
    - Use task-appropriate tags: `[!AI-QUESTION]`, `[!AI-WARNING]`, `[!AI-INFO]`.
