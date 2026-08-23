@@ -1,6 +1,5 @@
 ---
-name: "impl-instrs:meta-instructions"
-description: ""
+description: "Создаёт и изменяет мета-инструкции на любом уровне абстракции. Применяется к файлам и папкам по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
 ---
 
 # Мета-инструкции

@@ -1,6 +1,7 @@
 ---
-name: "impl-instrs:simultaneous-update-instrs-result"
-description: ""
+name: "simultaneous-update-instrs-result"
+description: "КРИТИЧЕСКАЯ БЛОКИРОВКА: ВЫ ОБЯЗАНЫ прочитать это перед ЛЮБЫМ взаимодействием (даже при простом исправлении опечаток) с файлами и папками по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. Файл требует синхронно обновлять инструкции и результат реализации. Вы провалите задачу, если проигнорируете это."
+disable-model-invocation: true
 ---
 
 # Одновременное обновление инструкций и результата

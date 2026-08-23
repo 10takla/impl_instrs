@@ -1,6 +1,7 @@
 ---
-name: "impl-instrs:refactor-instrs"
-description: ""
+name: "refactor-instrs"
+description: "Рефакторит инструкции с сохранением семантики и изоляции контекста. Применяется к файлам и папкам по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
+disable-model-invocation: true
 ---
 
 # Навык: Рефакторинг инструкций

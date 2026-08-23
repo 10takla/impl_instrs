@@ -1,6 +1,7 @@
 ---
-name: "impl-instrs:debug-feedback"
-description: ""
+name: "debug-feedback"
+description: "Пошагово обосновывает решения агента, предоставляет обратную связь и ищет ошибки в выполнении и формировании инструкций. Применяется к файлам и папкам по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
+disable-model-invocation: true
 ---
 
 # Дебаг и обратная связь

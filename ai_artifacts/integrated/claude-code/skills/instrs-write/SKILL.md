@@ -1,6 +1,7 @@
 ---
-name: "impl-instrs:instrs-write"
-description: ""
+name: "instrs-write"
+description: "Формирует и изолирует инструкции без выполнения описанного в них задания. Применяется к файлам и папкам по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
+disable-model-invocation: true
 ---
 
 # Алгоритм работы скилла "Формирование промптов" (instrs-write)
