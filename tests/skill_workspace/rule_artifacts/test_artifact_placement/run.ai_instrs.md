@@ -1,5 +1,3 @@
-# Тестовое задание: Сводный отчет о директории
-
 ## {{Сформировать сводный отчет}}
 Пожалуйста, создай файл `workspace_summary.txt`, содержащий список всех файлов в папке `tests/skill_impl_instrs_workspace/rule_artifacts/test_artifact_placement/`. 
 
