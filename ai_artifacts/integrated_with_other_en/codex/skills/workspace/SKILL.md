@@ -25,7 +25,9 @@ You are in an isolated workspace. You must strictly follow these algorithmic ste
 - `<keyword>.*/` (for example: `ai_instrs.name/`)
 *All files inside discovered folders are considered instructions.*
 
-**Step 3.2:** Use strictly the following patterns for searching single instruction files:
+**Step 3.2:** Check each discovered instruction folder for `_.md`. If present, treat it as the parent instruction inheriting the folder name and the other files as its subinstructions. If absent, preserve the same hierarchy implicitly: treat the folder name as the parent level and the other files as subinstructions.
+
+**Step 3.3:** Use strictly the following patterns for searching single instruction files:
 - `ai_instrs.<extension>`
 - `*.ai_instrs.<extension>`
 

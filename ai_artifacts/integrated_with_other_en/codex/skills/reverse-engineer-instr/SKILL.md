@@ -23,8 +23,8 @@ This skill translates an existing result (completed code, architecture, artifact
 
 **Step 3. Designing the structure of instruction files**
 1. Plan the structure for saving the rules (usually in the `ai_instrs/` folder of the project).
-2. Design `main.md` as a central entry point that consolidates the context.
-3. Distribute highly specialized rules into separate files and link them from `main.md`.
+2. When `_.md` is present, use it as the parent instruction named after the folder and the other files as subinstructions.
+3. When `_.md` is absent, preserve the hierarchy implicitly: the folder name is the parent level and the other files are subinstructions.
 
 **Step 4. Physical creation of instructions**
 1. Use `write_to_file` to create all planned Markdown files.
