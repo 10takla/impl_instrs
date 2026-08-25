@@ -21,7 +21,7 @@ const ADAPTERS = {
     name: 'agy',
     buildCommand({ workspaceDir, entrypointPath, params }) {
       const entrypointContent = fs.readFileSync(entrypointPath, 'utf8');
-      const args = ['--cwd', workspaceDir, 'chat', '--prompt', entrypointContent];
+      const args = ['--prompt', entrypointContent, '--dangerously-skip-permissions'];
       if (params) {
         args.push(...parseParams(params));
       }
@@ -35,10 +35,11 @@ const ADAPTERS = {
     name: 'codex',
     buildCommand({ workspaceDir, entrypointPath, params }) {
       const entrypointContent = fs.readFileSync(entrypointPath, 'utf8');
-      const args = ['--cwd', workspaceDir, '--prompt', entrypointContent];
+      const args = ['exec', '--cd', workspaceDir, '--dangerously-bypass-approvals-and-sandbox'];
       if (params) {
         args.push(...parseParams(params));
       }
+      args.push(entrypointContent);
       return {
         command: 'codex',
         args
@@ -227,6 +228,7 @@ async function main() {
   return new Promise((resolve) => {
     let timedOut = false;
     const child = spawn(command, args, {
+      cwd: outputDir,
       shell: true,
       stdio: 'inherit',
       detached: process.platform !== 'win32'

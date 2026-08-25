@@ -21,10 +21,10 @@
 
 `agy`:
 ```
-agy --cwd <workspaceDir> chat --prompt <entrypoint> [params]
+cd <workspaceDir> && agy --prompt <entrypoint> --dangerously-skip-permissions [params]
 ```
 
 `codex`:
 ```
-codex --cwd <workspaceDir> --prompt <entrypoint> [params]
+codex exec --cd <workspaceDir> --dangerously-bypass-approvals-and-sandbox [params] <entrypoint>
 ```
