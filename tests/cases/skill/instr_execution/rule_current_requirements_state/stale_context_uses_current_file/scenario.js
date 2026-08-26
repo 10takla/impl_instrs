@@ -1,9 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = async function ({ workspaceDir, run, continueRun }) {
-  const resultPath = path.join(workspaceDir, 'result.txt');
-  const requirementsPath = path.join(workspaceDir, 'requirements.ai_instrs.md');
+module.exports = async ({ workspaceDir, run, continueRun }) => {
   const prompt = [
     '/impl-instrs:instr-execution',
     '',
@@ -11,9 +9,9 @@ module.exports = async function ({ workspaceDir, run, continueRun }) {
     ''
   ].join('\n');
 
-  fs.writeFileSync(resultPath, 'KEEP\nINITIAL_STATE\n', 'utf8');
+  fs.writeFileSync(path.join(workspaceDir, 'result.txt'), 'KEEP\nINITIAL_STATE\n', 'utf8');
   fs.writeFileSync(
-    requirementsPath,
+    path.join(workspaceDir, 'requirements.ai_instrs.md'),
     [
       'В файле result.txt замени INITIAL_STATE на FIRST_STATE.',
       '',
@@ -23,22 +21,22 @@ module.exports = async function ({ workspaceDir, run, continueRun }) {
     'utf8'
   );
 
-  const session = await run(prompt);
-  const firstResult = fs.readFileSync(resultPath, 'utf8').trim();
-  if (firstResult !== 'KEEP\nFIRST_STATE') {
-    throw new Error('Первый запуск не сформировал FIRST_STATE.');
-  }
+  return run(prompt).then((session) => {
+    if (fs.readFileSync(path.join(workspaceDir, 'result.txt'), 'utf8').trim() !== 'KEEP\nFIRST_STATE') {
+      throw new Error('Первый запуск не сформировал FIRST_STATE.');
+    }
 
-  fs.writeFileSync(
-    requirementsPath,
-    [
-      'В файле result.txt замени FIRST_STATE на CURRENT_STATE.',
-      '',
-      'Сохрани строку KEEP без изменений. Не изменяй другие файлы и не создавай новые.',
-      ''
-    ].join('\n'),
-    'utf8'
-  );
+    fs.writeFileSync(
+      path.join(workspaceDir, 'requirements.ai_instrs.md'),
+      [
+        'В файле result.txt замени FIRST_STATE на CURRENT_STATE.',
+        '',
+        'Сохрани строку KEEP без изменений. Не изменяй другие файлы и не создавай новые.',
+        ''
+      ].join('\n'),
+      'utf8'
+    );
 
-  await continueRun(session, prompt);
+    return continueRun(session, prompt);
+  });
 };
