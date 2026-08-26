@@ -1,4 +1,4 @@
-/impl-instrs:instrs-write
+[impl-instrs:instrs-write](slashCommand;impl-instrs:instrs-write)
 
 Сформируй существующий файл `target.md`.
 
