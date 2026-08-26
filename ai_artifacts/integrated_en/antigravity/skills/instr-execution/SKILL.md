@@ -1,11 +1,8 @@
 ---
 name: "impl-instrs:instr-execution"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via slash command. Executes the instruction specified by the operator only after proactive context gathering. Triggers on interaction with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
 ---
 
-# Instruction Execution
-
-## Content
 When this skill is explicitly invoked, execute the instruction specified by the operator only after proactively gathering context.
 
 ### Step 1: Study the Root Structure
@@ -27,8 +24,20 @@ Find adjacent instructions that may affect the understanding of the target instr
 
 Use targeted reading. Avoid full scanning unless it is required to understand the target instruction.
 
-### Step 4: Execute the Target Instruction
-Only after gathering the necessary context should you proceed to execute the instruction specified by the operator.
+### Step 4: Obtain the Current State of the Requirements
+Immediately before execution, obtain the current state of the target instruction from its actual source. If the instruction is stored in a file, reread the file or fragment specified by the operator from the file system.
+
+Treat the obtained state of the requirements as the source of truth. Do not execute the instruction from a copy retained in context.
+
+### Step 5: Obtain the Existing State of the Result
+If a result from a previous execution exists, obtain its current state from its actual source.
+
+Do not use a copy of the result retained in context instead of checking its current state.
+
+### Step 6: Form the New State of the Result
+Reconcile the current state of the requirements with the existing state of the result. Apply the necessary additions, changes, and removals while preserving unaffected parts.
+
+If the operator requested an independent new result, create it without changing the previous result.
 
 All actions must rely on the gathered context, terminology, and applicable constraints.
 

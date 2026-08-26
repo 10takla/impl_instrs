@@ -1,9 +1,7 @@
 ---
 name: "impl-instrs-instrs-write"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via slash command. Formulates and isolates prompts (instructions) without executing the task described by the instruction. Triggers on interaction with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
 ---
-
-# Algorithm for the "Prompt Formulation" (instrs-write) Skill
 
 You are in the instruction formulation mode. Your task is to transform the operator's business requirements into formalized instructions (prompts), strictly following the imperative algorithm described below.
 
@@ -25,11 +23,11 @@ If the operator's requirement refers to the agent's future work result, transfer
 3. **ELSE**: Proceed to the next phase.
 
 ## 2. Incremental Update Phase (during editing)
-**Input:** An existing instruction and new requirements.
+**Input:** Requirements for the instruction and the existing instruction.
 
-1. **Assess the current state** of the instruction and its associated implementation in the codebase.
-2. **Formulate changes incrementally** — strictly relative to the previous state.
-3. **Minimize overwriting:** Do not rewrite the entire instruction or code if changes concern only a single block. Keep in mind that the operator iteratively changes instructions directly in the file system, so save tokens and update only the delta.
+1. **Obtain the current state of the requirements and the existing state of the instruction** from their sources immediately before editing. If a state is stored in a file, reread that file.
+2. **Reconcile the current requirements with the existing instruction** and identify the necessary additions, changes, and removals.
+3. **Form the new state of the instruction** by applying only the required delta and preserving unaffected parts.
 
 ## 3. Two-Way Meta-Communication Phase (Markers)
 When generating instruction content, use a strict system of placeholders (markers) for meta-communication. **CRITICALLY IMPORTANT:** Any communication, requests for clarification, or status reporting must occur via these markers directly within the text of the instruction files, rather than in free-form dialogue.

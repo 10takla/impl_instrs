@@ -8,7 +8,7 @@
 **Алгоритм:**
 1. Очищает содержимое `<test-dir>/output/`.
 2. Копирует содержимое `<test-dir>/workspace/` в `<test-dir>/output/` (если `workspace/` существует).
-3. Копирует [](<../ai_artifacts/integrated_with_other_en/codex/skills/>) в `<test-dir>/output/.agents/skills/`.
+3. Копирует [](<../ai_artifacts/integrated_en/codex/skills/>) в `<test-dir>/output/.agents/skills/`.
 4. Запускает сессию агента через адаптер: `workspaceDir` = `<test-dir>/output/`, `entrypoint` = содержимое `<test-dir>/run.md`.
 5. Прерывает процесс по тайм-ауту.
 
