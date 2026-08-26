@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = async function ({ workspaceDir, run, continueRun }) {
+  const resultPath = path.join(workspaceDir, 'result.txt');
+  const requirementsPath = path.join(workspaceDir, 'requirements.ai_instrs.md');
   const prompt = [
     '/impl-instrs:instr-execution',
     '',
@@ -9,9 +11,9 @@ module.exports = async function ({ workspaceDir, run, continueRun }) {
     ''
   ].join('\n');
 
-  fs.writeFileSync(path.join(workspaceDir, 'result.txt'), 'KEEP\nINITIAL_STATE\n', 'utf8');
+  fs.writeFileSync(resultPath, 'KEEP\nINITIAL_STATE\n', 'utf8');
   fs.writeFileSync(
-    requirepath.join(workspaceDir, 'requirements.ai_instrs.md'),
+    requirementsPath,
     [
       'В файле result.txt замени INITIAL_STATE на FIRST_STATE.',
       '',

@@ -1,450 +1,362 @@
 #!/usr/bin/env node
 
-/**
- * Test runner script for executing isolated AI agent test cases.
- *
- * Interface:
- *   node runner.js <test-dir> --agent <adapter> [--params <string>]
- */
-
 const fs = require('fs');
 const path = require('path');
-const { spawn, execSync } = require('child_process');
+const readline = require('readline');
+const { spawn, spawnSync } = require('child_process');
 
-const DEFAULT_TIMEOUT_SEC = 120;
+const DEFAULT_TIMEOUT_MS = 120000;
 
-// ============================================================================
-// 1. Adapters Block (CLI manager commands are defined strictly here)
-// ============================================================================
-
-// --- agy stream parser (инлайн из antigravity-cli/scripts/index.js) ---
-function extractAgyToolDetail(params) {
-  if (!params || typeof params !== 'object') return '';
-  for (const val of Object.values(params)) {
-    if (typeof val === 'string' || typeof val === 'number') {
-      return `-> "${val}"`;
-    }
-  }
-  return '';
-}
-
-async function parseAgyStream(readable) {
-  const readline = require('readline');
-  const rl = readline.createInterface({ input: readable, terminal: false });
-
-  const processedSteps = new Set();
-  const seenToolErrors = new Set();
-  let finalResponse = null;
-  let sessionError = null;
-  let conversationId = null;
-  let headerPrinted = false;
-  let logHeaderPrinted = false;
-  const deltaBuffer = new Map();
-
-  for await (const line of rl) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    let data;
-    try { data = JSON.parse(trimmed); } catch { continue; }
-
-    const eventType = data.event || data.type;
-
-    if (eventType === 'init') {
-      const initData = data.init || data;
-      conversationId = data.conversation_id || initData.conversation_id || null;
-      if (conversationId && !headerPrinted) {
-        process.stdout.write(`[Conversation ID]: ${conversationId}\n`);
-        headerPrinted = true;
-      }
-    } else if (eventType === 'step_update') {
-      const update = data.step_update || data;
-      const stepIdx = update.step_index;
-
-      if (update.step_type === 'tool' && update.tool_name) {
-        const detail = extractAgyToolDetail((update.tool_info || {}).parameters || {});
-        if (!logHeaderPrinted) {
-          process.stdout.write('\n=== CHRONOLOGICAL ACTION LOG ===\n');
-          logHeaderPrinted = true;
-        }
-        if (update.state === 'ACTIVE' && !processedSteps.has(stepIdx)) {
-          processedSteps.add(stepIdx);
-          process.stdout.write(`• [Tool] ${update.tool_name} ${detail}`.trim() + '\n');
-        }
-        if (update.state === 'ERROR' && update.tool_info?.error?.message) {
-          const errMsg = update.tool_info.error.message;
-          seenToolErrors.add(errMsg);
-          process.stdout.write(`  └── [Error]: ${errMsg}\n`);
-        }
-      }
-
-      if (update.step_type === 'agent_response' && update.text_delta) {
-        const prev = deltaBuffer.get(stepIdx) || '';
-        deltaBuffer.set(stepIdx, prev + update.text_delta);
-      }
-    } else if (eventType === 'result') {
-      const res = data.result || data;
-      finalResponse = (res.response || '').trim();
-      const rawError = res.error || null;
-      sessionError = rawError && !seenToolErrors.has(rawError) ? rawError : null;
-      conversationId = conversationId || res.conversation_id || null;
-      if (!headerPrinted && conversationId) {
-        process.stdout.write(`[Conversation ID]: ${conversationId}\n`);
-        headerPrinted = true;
-      }
-      if (!finalResponse && deltaBuffer.size > 0) {
-        const lastKey = Math.max(...deltaBuffer.keys());
-        finalResponse = (deltaBuffer.get(lastKey) || '').trim();
-      }
-    }
-  }
-
-  if (sessionError) process.stdout.write(`\n[Session Error]: ${sessionError}\n`);
-  if (finalResponse) {
-    process.stdout.write('\n=== FINAL RESULT ===\n');
-    process.stdout.write(finalResponse + '\n');
-  }
-}
-
-// --- codex stream parser (инлайн из codex-cli/scripts/index.js) ---
-function extractCodexCommandLabel(command) {
-  if (!command) return '';
-  const match = command.match(/-Command\s+"?(.+?)(?:"|$)/s) || command.match(/-Command\s+'(.+?)(?:'|$)/s);
-  if (match) {
-    const inner = match[1].replace(/\\"/g, '"').trim();
-    return `-> "${inner.slice(0, 120)}${inner.length > 120 ? '...' : ''}"`;
-  }
-  return `-> "${String(command).slice(0, 120)}"`;
-}
-
-async function parseCodexStream(readable) {
-  const readline = require('readline');
-  const rl = readline.createInterface({ input: readable, terminal: false });
-
-  const processedItems = new Set();
-  const seenToolErrors = new Set();
-  let finalResponse = null;
-  let sessionError = null;
-  let threadId = null;
-  let headerPrinted = false;
-  let logHeaderPrinted = false;
-
-  for await (const line of rl) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    let data;
-    try { data = JSON.parse(trimmed); } catch { continue; }
-
-    const eventType = data.type;
-
-    if (eventType === 'thread.started') {
-      threadId = data.thread_id || null;
-      if (threadId && !headerPrinted) {
-        process.stdout.write(`[Thread ID]: ${threadId}\n`);
-        headerPrinted = true;
-      }
-    } else if (eventType === 'item.completed') {
-      const item = data.item || {};
-      const itemId = item.id;
-      const itemType = item.type;
-
-      if ((itemType === 'command_execution' || itemType === 'tool_call') && !processedItems.has(itemId)) {
-        processedItems.add(itemId);
-        const label = extractCodexCommandLabel(item.command || item.name || '');
-        if (!logHeaderPrinted) {
-          process.stdout.write('\n=== CHRONOLOGICAL ACTION LOG ===\n');
-          logHeaderPrinted = true;
-        }
-        process.stdout.write(`• [Tool] ${itemType} ${label}`.trim() + '\n');
-        if (item.status === 'failed' || (item.exit_code != null && item.exit_code !== 0)) {
-          const errSummary = (item.aggregated_output || item.error || '').split('\n')[0].trim();
-          if (errSummary) {
-            seenToolErrors.add(errSummary);
-            process.stdout.write(`  └── [Error]: exit ${item.exit_code || 1} — ${errSummary.slice(0, 200)}\n`);
-          }
-        }
-      }
-
-      if (itemType === 'agent_message' && item.text && !processedItems.has(itemId)) {
-        processedItems.add(itemId);
-        finalResponse = item.text.trim();
-      }
-    } else if (eventType === 'turn.failed') {
-      const err = data.error && (data.error.message || JSON.stringify(data.error));
-      if (err && !seenToolErrors.has(err)) sessionError = String(err).slice(0, 300);
-    }
-  }
-
-  if (sessionError) process.stdout.write(`\n[Session Error]: ${sessionError}\n`);
-  if (finalResponse) {
-    process.stdout.write('\n=== FINAL RESULT ===\n');
-    process.stdout.write(finalResponse + '\n');
-  }
-}
-
-// --- Адаптеры ---
-const ADAPTERS = {
-  agy: {
-    name: 'agy',
-    parseStream: parseAgyStream,
-    buildCommand({ workspaceDir, entrypointPath, params }) {
-      const entrypointContent = fs.readFileSync(entrypointPath, 'utf8');
-      const args = [
-        '--add-dir', workspaceDir,
-        '-p', entrypointContent,
-        '--output-format=stream-json',
-        '--dangerously-skip-permissions'
-      ];
-      if (params) args.push(...parseParams(params));
-      return { command: 'agy', args };
-    }
-  },
-  codex: {
-    name: 'codex',
-    parseStream: parseCodexStream,
-    buildCommand({ workspaceDir, entrypointPath, params }) {
-      const entrypointContent = fs.readFileSync(entrypointPath, 'utf8');
-      // stdin закрывается через echo "" | для корректной работы codex
-      const args = ['exec', '--json', '--cd', workspaceDir];
-      if (params) args.push(...parseParams(params));
-      args.push(entrypointContent);
-      return { command: 'codex', args, stdinData: '' };
-    }
-  }
-};
-
-function getAdapter(adapterName) {
-  const adapter = ADAPTERS[adapterName];
-  if (!adapter) {
-    const available = Object.keys(ADAPTERS).join(', ');
-    throw new Error(`Unknown agent adapter: "${adapterName}". Available adapters: ${available}`);
-  }
-  return adapter;
-}
-
-// ============================================================================
-// 2. Helper Functions
-// ============================================================================
-
-function parseParams(paramsStr) {
-  if (!paramsStr || typeof paramsStr !== 'string') return [];
-  const args = [];
-  const regex = /[^\s"']+|"([^"]*)"|'([^']*)'/g;
+function parseParams(value) {
+  if (!value) return [];
+  const params = [];
+  const pattern = /[^\s"']+|"([^"]*)"|'([^']*)'/g;
   let match;
-  while ((match = regex.exec(paramsStr)) !== null) {
-    if (match[1] !== undefined) {
-      args.push(match[1]);
-    } else if (match[2] !== undefined) {
-      args.push(match[2]);
-    } else {
-      args.push(match[0]);
-    }
+  while ((match = pattern.exec(value)) !== null) {
+    params.push(match[1] ?? match[2] ?? match[0]);
   }
-  return args;
+  return params;
 }
 
-function parseCliArgs(argv) {
+function parseArguments(argv) {
+  const options = { testDir: null, agent: null, params: [] };
   const args = argv.slice(2);
-  const options = {
-    testDir: null,
-    agent: null,
-    params: null
-  };
 
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-
-    if (arg === '--agent' || arg === '-a') {
-      options.agent = args[++i];
-    } else if (arg.startsWith('--agent=')) {
-      options.agent = arg.slice('--agent='.length);
-    } else if (arg === '--params' || arg === '-p') {
-      options.params = args[++i];
-    } else if (arg.startsWith('--params=')) {
-      options.params = arg.slice('--params='.length);
-    } else if (arg === '--help' || arg === '-h') {
-      printUsage();
-      process.exit(0);
-    } else if (!arg.startsWith('-') && !options.testDir) {
-      options.testDir = arg;
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === '--agent' || argument === '-a') {
+      options.agent = args[++index];
+    } else if (argument.startsWith('--agent=')) {
+      options.agent = argument.slice('--agent='.length);
+    } else if (argument === '--params' || argument === '-p') {
+      options.params = parseParams(args[++index]);
+    } else if (argument.startsWith('--params=')) {
+      options.params = parseParams(argument.slice('--params='.length));
+    } else if (argument === '--help' || argument === '-h') {
+      options.help = true;
+    } else if (!argument.startsWith('-') && !options.testDir) {
+      options.testDir = argument;
     } else {
-      console.warn(`[runner] Warning: unrecognized argument: ${arg}`);
+      throw new Error('Неизвестный аргумент: ' + argument);
     }
   }
-
   return options;
 }
 
 function printUsage() {
-  console.log(`
-Usage:
-  node runner.js <test-dir> --agent <adapter> [--params <string>]
-
-Options:
-  <test-dir>           Path to test directory containing run.md and optional workspace/
-  --agent, -a          Agent adapter to use (agy, codex) [required]
-  --params, -p         Additional parameters to append to agent CLI
-  --help, -h           Show this help message
-`);
+  console.log('node runner.js <test-dir> --agent <adapter> [--params <string>]');
 }
 
-function killProcessTree(pid) {
+function killProcessTree(child) {
+  if (!child.pid) return;
   if (process.platform === 'win32') {
+    spawnSync('taskkill', ['/pid', String(child.pid), '/T', '/F'], {
+      stdio: 'ignore',
+      windowsHide: true
+    });
+    return;
+  }
+  try {
+    process.kill(-child.pid, 'SIGKILL');
+  } catch {
     try {
-      execSync(`taskkill /pid ${pid} /T /F`, { stdio: 'ignore' });
+      child.kill('SIGKILL');
     } catch {
-      // Process might have already terminated
-    }
-  } else {
-    try {
-      process.kill(-pid, 'SIGKILL');
-    } catch {
-      try {
-        process.kill(pid, 'SIGKILL');
-      } catch {
-        // Process might have already terminated
-      }
+      // Процесс уже завершён.
     }
   }
 }
 
-// ============================================================================
-// 3. Main Runner Logic
-// ============================================================================
+function printTool(toolName, detail) {
+  console.log('• [Tool] ' + toolName + (detail ? ' -> "' + detail + '"' : ''));
+}
 
-async function main() {
-  const cliOptions = parseCliArgs(process.argv);
+async function parseAgyStream(stream) {
+  const lines = readline.createInterface({ input: stream, terminal: false });
+  const result = { sessionId: null, response: '', error: null };
+  const responseDeltas = new Map();
+  const activeTools = new Set();
 
-  if (!cliOptions.testDir) {
-    console.error('Error: <test-dir> is required.');
-    printUsage();
-    process.exit(1);
-  }
-
-  if (!cliOptions.agent) {
-    console.error('Error: --agent <adapter> is required.');
-    printUsage();
-    process.exit(1);
-  }
-
-  const testDirPath = path.resolve(process.cwd(), cliOptions.testDir);
-  if (!fs.existsSync(testDirPath) || !fs.statSync(testDirPath).isDirectory()) {
-    console.error(`Error: Test directory not found: ${cliOptions.testDir}`);
-    process.exit(1);
-  }
-
-  const entrypointPath = path.join(testDirPath, 'run.md');
-  if (!fs.existsSync(entrypointPath)) {
-    console.error(`Error: Entrypoint file not found: ${path.relative(process.cwd(), entrypointPath)}`);
-    process.exit(1);
-  }
-
-  const workspaceDir = path.join(testDirPath, 'workspace');
-  const outputDir = path.join(testDirPath, 'output');
-
-  // 1. Очищает директорию <test-dir>/output/ (удаляет и создает заново).
-  try {
-    if (fs.existsSync(outputDir)) {
-      fs.rmSync(outputDir, { recursive: true, force: true });
+  for await (const line of lines) {
+    let event;
+    try {
+      event = JSON.parse(line);
+    } catch {
+      continue;
     }
-    fs.mkdirSync(outputDir, { recursive: true });
-  } catch (err) {
-    console.error('Error clearing output directory:', err.message);
-    process.exit(1);
-  }
 
-  // 2. Копирует содержимое <test-dir>/workspace/ в <test-dir>/output/ (если workspace/ существует).
-  try {
-    if (fs.existsSync(workspaceDir) && fs.statSync(workspaceDir).isDirectory()) {
-      fs.cpSync(workspaceDir, outputDir, { recursive: true });
+    const eventType = event.event || event.type;
+    if (eventType === 'init') {
+      const init = event.init || event;
+      result.sessionId = event.conversation_id || init.conversation_id || result.sessionId;
+    } else if (eventType === 'step_update') {
+      const update = event.step_update || event;
+      if (
+        update.step_type === 'tool' &&
+        update.state === 'ACTIVE' &&
+        !activeTools.has(update.step_index)
+      ) {
+        activeTools.add(update.step_index);
+        const parameters = update.tool_info?.parameters || {};
+        const detail = Object.values(parameters).find(function (value) {
+          return typeof value === 'string' || typeof value === 'number';
+        });
+        printTool(update.tool_name, detail == null ? '' : String(detail));
+      }
+      if (update.step_type === 'tool' && update.state === 'ERROR') {
+        const message = update.tool_info?.error?.message;
+        if (message) console.error('  └── [Error]: ' + message);
+      }
+      if (update.step_type === 'agent_response' && update.text_delta) {
+        responseDeltas.set(
+          update.step_index,
+          (responseDeltas.get(update.step_index) || '') + update.text_delta
+        );
+      }
+    } else if (eventType === 'result') {
+      const completed = event.result || event;
+      result.sessionId = completed.conversation_id || result.sessionId;
+      result.response = String(completed.response || '').trim();
+      result.error = completed.error || null;
     }
-  } catch (err) {
-    console.error('Error copying workspace:', err.message);
-    process.exit(1);
   }
 
-  // 3. Копирует артефакты скиллов в <test-dir>/output/.agents/skills/.
-  const skillsSrc = path.join(__dirname, '..', 'ai_artifacts', 'integrated_with_other_en', 'codex', 'skills');
-  const skillsDst = path.join(outputDir, '.agents', 'skills');
-  try {
-    if (fs.existsSync(skillsSrc)) {
-      fs.mkdirSync(skillsDst, { recursive: true });
-      fs.cpSync(skillsSrc, skillsDst, { recursive: true });
+  if (!result.response && responseDeltas.size > 0) {
+    const lastStep = Math.max(...responseDeltas.keys());
+    result.response = responseDeltas.get(lastStep).trim();
+  }
+  return result;
+}
+
+async function parseCodexStream(stream) {
+  const lines = readline.createInterface({ input: stream, terminal: false });
+  const result = { sessionId: null, response: '', error: null };
+  const completedItems = new Set();
+
+  for await (const line of lines) {
+    let event;
+    try {
+      event = JSON.parse(line);
+    } catch {
+      continue;
     }
-  } catch (err) {
-    console.error('Error copying skills:', err.message);
-    process.exit(1);
+
+    if (event.type === 'thread.started') {
+      result.sessionId = event.thread_id || result.sessionId;
+    } else if (event.type === 'item.completed') {
+      const item = event.item || {};
+      if (completedItems.has(item.id)) continue;
+      completedItems.add(item.id);
+      if (item.type === 'command_execution' || item.type === 'tool_call') {
+        printTool(item.type, String(item.command || item.name || '').slice(0, 160));
+      } else if (item.type === 'agent_message') {
+        result.response = String(item.text || '').trim();
+      }
+    } else if (event.type === 'turn.failed') {
+      result.error = event.error?.message || JSON.stringify(event.error || event);
+    }
   }
+  return result;
+}
 
-  // 4. Запускает сессию агента через адаптер: workspaceDir = <test-dir>/output/, entrypoint = содержимое <test-dir>/run.md.
-  let adapter;
-  try {
-    adapter = getAdapter(cliOptions.agent);
-  } catch (err) {
-    console.error(err.message);
-    process.exit(1);
+const ADAPTERS = {
+  agy: {
+    parseStream: parseAgyStream,
+    start: function ({ workspaceDir, prompt, params }) {
+      return {
+        command: 'agy',
+        args: [
+          '--add-dir', workspaceDir,
+          '-p', prompt,
+          '--output-format=stream-json',
+          '--dangerously-skip-permissions'
+        ].concat(params)
+      };
+    },
+    continue: function ({ workspaceDir, sessionId, prompt, params }) {
+      return {
+        command: 'agy',
+        args: [
+          '--conversation', sessionId,
+          '--add-dir', workspaceDir,
+          '-p', prompt,
+          '--output-format=stream-json',
+          '--dangerously-skip-permissions'
+        ].concat(params)
+      };
+    }
+  },
+  codex: {
+    parseStream: parseCodexStream,
+    start: function ({ workspaceDir, prompt, params }) {
+      return {
+        command: 'codex',
+        args: ['exec', '--json', '--cd', workspaceDir].concat(params, [prompt]),
+        stdin: ''
+      };
+    },
+    continue: function ({ sessionId, prompt, params }) {
+      return {
+        command: 'codex',
+        args: ['exec', 'resume', sessionId, '--json'].concat(params),
+        stdin: prompt
+      };
+    }
   }
+};
 
-
-  return new Promise((resolve) => {
-    let timedOut = false;
-    const { command, args, stdinData } = adapter.buildCommand({
-      workspaceDir: outputDir,
-      entrypointPath,
-      params: cliOptions.params
-    });
-
-    console.log(`[runner] Running test "${path.basename(testDirPath)}" via ${adapter.name}...`);
-    console.log(`[runner] Workspace: ${path.relative(process.cwd(), outputDir)}`);
-    console.log(`[runner] Command: ${command} ${args.map(a => (a.includes(' ') || a.includes('\n') ? `"${a.replace(/"/g, '\\"')}"` : a)).join(' ')}`);
-    console.log(`[runner] Timeout: ${DEFAULT_TIMEOUT_SEC}s`);
-
-    const child = spawn(command, args, {
-      cwd: outputDir,
+function executeAgent({ adapter, invocation, workspaceDir, step }) {
+  return new Promise(function (resolve, reject) {
+    console.log('\n[runner] Шаг ' + step + ': запуск ' + adapter.name);
+    const child = spawn(invocation.command, invocation.args, {
+      cwd: workspaceDir,
+      detached: process.platform !== 'win32',
       shell: false,
       stdio: ['pipe', 'pipe', 'inherit'],
-      detached: process.platform !== 'win32'
+      windowsHide: true
     });
-
-    // Для codex: закрыть stdin через пустую строку
-    if (stdinData !== undefined) {
-      child.stdin.write(stdinData);
-      child.stdin.end();
-    } else {
-      child.stdin.end();
-    }
-
-    const timer = setTimeout(() => {
+    const parsedResult = adapter.parseStream(child.stdout);
+    let timedOut = false;
+    const timer = setTimeout(function () {
       timedOut = true;
-      console.error(`\n[runner] Error: Execution timed out after ${DEFAULT_TIMEOUT_SEC}s`);
-      if (child.pid) killProcessTree(child.pid);
-    }, DEFAULT_TIMEOUT_SEC * 1000);
+      killProcessTree(child);
+    }, DEFAULT_TIMEOUT_MS);
 
-    // Запуск парсера потока в фоне
-    adapter.parseStream(child.stdout).catch((err) => {
-      console.error('[runner] Stream parser error:', err.message);
-    });
-
-    child.on('error', (err) => {
+    child.once('error', function (error) {
       clearTimeout(timer);
-      console.error('[runner] Process error:', err.message);
-      process.exit(1);
+      reject(error);
     });
-
-    child.on('exit', (code, signal) => {
+    child.once('exit', async function (code, signal) {
       clearTimeout(timer);
-      if (timedOut) process.exit(1);
-      if (code === 0) {
-        console.log(`[runner] Agent session finished successfully (exit code 0).`);
-        process.exit(0);
-      } else {
-        console.error(`[runner] Agent session failed with exit code ${code}${signal ? ` (signal: ${signal})` : ''}.`);
-        process.exit(1);
+      try {
+        const parsed = await parsedResult;
+        if (timedOut) throw new Error('Шаг ' + step + ' превысил тайм-аут 120 секунд.');
+        if (code !== 0) {
+          throw new Error(
+            'Шаг ' + step + ' завершился с кодом ' + code + (signal ? ' (' + signal + ')' : '') + '.'
+          );
+        }
+        if (parsed.error) throw new Error('Шаг ' + step + ': ' + parsed.error);
+        if (parsed.response) {
+          console.log('\n=== FINAL RESULT ===');
+          console.log(parsed.response);
+        }
+        resolve(parsed);
+      } catch (error) {
+        reject(error);
       }
     });
+    child.stdin.end(invocation.stdin ?? '');
   });
 }
 
-main().catch((err) => {
-  console.error('[runner] Fatal error:', err.message);
-  process.exit(1);
+function prepareWorkspace(testDir, outputDir) {
+  fs.rmSync(outputDir, { recursive: true, force: true });
+  fs.mkdirSync(outputDir, { recursive: true });
+
+  const workspaceDir = path.join(testDir, 'workspace');
+  if (fs.existsSync(workspaceDir)) {
+    fs.cpSync(workspaceDir, outputDir, { recursive: true });
+  }
+
+  const skillsSource = path.join(
+    __dirname,
+    '..',
+    'ai_artifacts',
+    'integrated_with_other_en',
+    'codex',
+    'skills'
+  );
+  if (fs.existsSync(skillsSource)) {
+    const skillsTarget = path.join(outputDir, '.agents', 'skills');
+    fs.mkdirSync(path.dirname(skillsTarget), { recursive: true });
+    fs.cpSync(skillsSource, skillsTarget, { recursive: true });
+  }
+}
+
+async function main() {
+  const options = parseArguments(process.argv);
+  if (options.help) {
+    printUsage();
+    return;
+  }
+  if (!options.testDir || !options.agent) {
+    printUsage();
+    throw new Error('Укажи <test-dir> и --agent <adapter>.');
+  }
+
+  const adapterImplementation = ADAPTERS[options.agent];
+  if (!adapterImplementation) throw new Error('Неизвестный адаптер: ' + options.agent + '.');
+  const adapter = Object.assign({ name: options.agent }, adapterImplementation);
+
+  const testDir = path.resolve(process.cwd(), options.testDir);
+  const scenarioPath = path.join(testDir, 'scenario.js');
+  const outputDir = path.join(testDir, 'output');
+  if (!fs.existsSync(scenarioPath)) throw new Error('Не найден сценарий: ' + scenarioPath);
+
+  prepareWorkspace(testDir, outputDir);
+  const scenario = require(scenarioPath);
+  if (typeof scenario !== 'function') {
+    throw new Error('scenario.js должен экспортировать асинхронную функцию.');
+  }
+
+  let step = 0;
+  const invoke = async function (operation, session, prompt) {
+    if (typeof prompt !== 'string' || !prompt.trim()) {
+      throw new Error('Промпт запуска не должен быть пустым.');
+    }
+    if (
+      operation === 'continue' &&
+      (!session || session.adapter !== adapter.name || !session.sessionId)
+    ) {
+      throw new Error('Передан некорректный дескриптор сессии.');
+    }
+
+    step += 1;
+    const invocation = operation === 'start'
+      ? adapter.start({ workspaceDir: outputDir, prompt, params: options.params })
+      : adapter.continue({
+          workspaceDir: outputDir,
+          sessionId: session.sessionId,
+          prompt,
+          params: options.params
+        });
+    const result = await executeAgent({
+      adapter,
+      invocation,
+      workspaceDir: outputDir,
+      step
+    });
+    const sessionId = result.sessionId || session?.sessionId;
+    if (!sessionId) throw new Error('Шаг ' + step + ' не вернул идентификатор сессии.');
+    return Object.freeze({
+      adapter: adapter.name,
+      sessionId,
+      response: result.response
+    });
+  };
+
+  const originalCwd = process.cwd();
+  process.chdir(outputDir);
+  try {
+    await scenario({
+      testDir,
+      workspaceDir: outputDir,
+      run: function (prompt) {
+        return invoke('start', null, prompt);
+      },
+      continueRun: function (session, prompt) {
+        return invoke('continue', session, prompt);
+      }
+    });
+  } finally {
+    process.chdir(originalCwd);
+  }
+
+  console.log('\n[runner] Сценарий успешно завершён (' + step + ' шагов).');
+}
+
+main().catch(function (error) {
+  console.error('\n[runner] Ошибка: ' + error.message);
+  process.exitCode = 1;
 });
