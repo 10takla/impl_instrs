@@ -1,35 +1,39 @@
 ---
 name: "instruction-style"
-description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even for simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
 ---
 
-# Strict Algorithm for Writing and Formatting Instructions
+# Стиль инструкций
 
-When creating or editing any instruction files, YOU MUST execute the following algorithm line by line:
+## Условия вызова
+- [Без явного вызова](<./main.md#без-явного-вызова>)
+- [Реагирует на файлы инструкций](<./main.md#реагирует-на-файлы-инструкций>)
 
-## STEP 1: Ensure "Target Completeness"
-1. Analyze the input requirements.
-2. Exclude any fabricated details added for the sake of perceived "objective completeness" or an ideal specification template.
-3. Keep ONLY those facts, meanings, and constraints that directly convey the vision of the task.
+## Содержание
+При создании или редактировании любых файлов инструкций, ТЫ ОБЯЗАН построчно выполнить следующий алгоритм:
 
-## STEP 2: Compress to "Conciseness"
-1. Rewrite all retained thoughts as directly and briefly as possible.
-2. Remove verbal "fluff", introductory words, and lengthy reasoning.
-3. Ensure that for each semantic unit, there is exactly one unambiguous formulation. Not a single word should take up space unnecessarily.
+### ШАГ 1: Обеспечь "Целевую полноту"
+1. Проанализируй входные требования.
+2. Исключи любые выдуманные детали, добавленные ради кажущейся "объективной полноты" или шаблона идеального ТЗ.
+3. Оставь ТОЛЬКО те факты, смыслы и ограничения, которые прямо передают видение задачи.
 
-## STEP 3: Calibrate the Level of Generalization
-For each formulated rule, check its level of abstraction:
-1. **Search for over-specification:** Ensure that a general rule is NOT described using terms of a specific example. If it is — generalize the formulation.
-2. **Search for over-abstraction:** Ensure that the rule is NOT disconnected from the actual context of the instruction. If it has become vague — make it more specific.
-*The rule must be generalized to exactly the level at which the instruction itself resides.*
+### ШАГ 2: Выполни сжатие до "Лаконичности"
+1. Перепиши все оставленные мысли максимально прямо и кратко.
+2. Удали словесную "воду", вводные слова и долгие рассуждения.
+3. Убедись, что на каждую смысловую единицу приходится ровно одна недвусмысленная формулировка. Ни одно слово не должно занимать место зря.
 
-## STEP 4: Adjust the Boundaries (Positive / Negative prompts)
-1. Assess the risk of a critical agent error when executing the instruction.
-2. If the risk is high, add a strict negative prompt (prohibition) as a boundary of what is allowed.
-3. IT IS FORBIDDEN to duplicate the same meaning in both a positive and negative way (this wastes tokens).
-4. If strict control is not required, use neutral notifications instead of directive prompts.
+### ШАГ 3: Откалибруй уровень обобщения
+Для каждого формируемого правила проверь его уровень абстракции:
+1. **Поиск пере-конкретизации:** Убедись, что общее правило НЕ описано терминами частного примера. Если да — обобщи формулировку.
+2. **Поиск пере-абстракции:** Убедись, что правило НЕ оторвано от реального контекста инструкции. Если оно стало расплывчатым — конкретизируй его.
+*Правило должно быть обобщено ровно до того уровня, на котором находится сама инструкция.*
 
-## STEP 5: Use Imperative Style
-1. Formulate all instructions in the imperative mood (e.g., "Execute...", "Write...", "Verify...").
-2. Avoid neutral or descriptive constructions like "You need to execute..." or "It is recommended to check...".
+### ШАГ 4: Настрой окантовку (Позитив / Негатив промпты)
+1. Оцени риск критической ошибки агента при выполнении инструкции.
+2. Если риск велик, добавь строгий негативный промпт (запрет) как границу дозволенного.
+3. ЗАПРЕЩАЕТСЯ дублировать один и тот же смысл в позитивном и негативном ключе (это тратит токены).
+4. Если жесткое управление не требуется, используй нейтральные уведомления вместо директивных промптов.
 
+### ШАГ 5: Используй императивный стиль
+1. Формулируй все указания в императивном (повелительном) наклонении (например: «Выполните...», «Запишите...», «Проверьте...»).
+2. Избегай нейтральных или описательных конструкций вроде «Нужно выполнить...» или «Рекомендуется проверить...».

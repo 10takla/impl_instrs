@@ -1,27 +1,34 @@
 ---
 name: "impl-instrs:simultaneous-update-instrs-result"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Simultaneous update of instructions and the result. CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even for simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
 ---
 
-# Simultaneous Update of Instructions and Result
+# Одновременное обновление инструкций и результата
 
-## Concept
-Any agent decisions made during the modification of source code or other implementation results must be immediately reflected in the instruction files. The instructions form a unified project context and act as a strict source of truth. The agent is obliged to maintain the code and instructions in a fully synchronized state.
+## Условия вызова
+- [По явному вызову](<./main.md#по-явному-вызову>)
+- [Реагирует на файлы инструкций](<./main.md#реагирует-на-файлы-инструкций>)
 
-## Mandatory Step-by-Step Algorithm
+## Содержание
+# Одновременное обновление инструкций и результата
 
-You must strictly adhere to the following sequence of actions for every invocation:
+## Концепция
+Любые решения агента, принимаемые в ходе изменения исходного кода или иных результатов реализации, должны немедленно отражаться в файлах инструкций. Инструкции образуют единый контекст проекта и выступают строгим источником истины. Агент обязан поддерживать код и инструкции в полностью синхронизированном состоянии. 
 
-**Step 1: Obtain Global Context.** Before starting any changes, use the `list_dir` tool to explore the root directory of the instructions (e.g., `ai_instrs/`). This action is mandatory, even if the operator provided exact paths. Do not skimp on context.
+## Обязательный пошаговый алгоритм
 
-**Step 2: Read Base Terminology.** Based on the obtained directory tree, find and read the root reference files (glossaries, general rules, structures). Do this before proceeding to the local task files.
+Вы обязаны неукоснительно соблюдать следующую последовательность действий при каждом вызове:
 
-**Step 3: Study Target Files.** Read the target instruction files affected by the current task, as well as related instructions discovered in Steps 1 and 2.
+**Шаг 1: Получение глобального контекста.** Прежде чем приступать к каким-либо изменениям, используй инструмент `list_dir` для исследования корневой директории инструкций (например, `ai_instrs/`). Это действие обязательно, даже если оператор предоставил точные пути. Никакой экономии на контексте.
 
-**Step 4: Make Changes to the Result.** Complete the assigned task by modifying the target source code or other implementation artifact.
+**Шаг 2: Чтение базовой терминологии.** На основе полученного дерева директорий, найди и прочти корневые справочные файлы (глоссарии, общие правила, структуры). Сделай это до перехода к локальным файлам задачи.
 
-**Step 5: Analyze the Decisions Made.** Formulate for yourself what new decisions, approaches, or architectural nuances were applied when modifying the code in Step 4.
+**Шаг 3: Изучение целевых файлов.** Прочти целевые файлы инструкций, затрагиваемые текущей задачей, а также смежные с ними инструкции, обнаруженные на шагах 1 и 2.
 
-**Step 6: Update Instructions.** Immediately edit the relevant instruction files so that they accurately describe the current state of the implementation and include the decisions identified in Step 5. Update the instructions simultaneously with the code changes.
+**Шаг 4: Внесение изменений в результат.** Выполни поставленную задачу, изменив целевой исходный код или другой артефакт реализации.
 
-**Step 7: Final Validation.** Ensure that the updated code and updated instructions do not contradict the global context (Step 2) and form a single, consistent system.
+**Шаг 5: Анализ принятых решений.** Сформулируй для себя, какие новые решения, подходы или архитектурные нюансы были применены при изменении кода на Шаге 4.
+
+**Шаг 6: Обновление инструкций.** Немедленно отредактируй соответствующие файлы инструкций, чтобы они точно описывали актуальное состояние реализации и включали решения, выявленные на Шаге 5. Обновляй инструкции одновременно с изменением кода.
+
+**Шаг 7: Финальная валидация.** Удостоверься, что обновленный код и обновленные инструкции не противоречат глобальному контексту (Шаг 2) и образуют единую, непротиворечивую систему.

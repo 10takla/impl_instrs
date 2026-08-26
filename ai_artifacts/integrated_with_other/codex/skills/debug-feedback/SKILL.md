@@ -1,42 +1,49 @@
 ---
 name: "debug-feedback"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via slash command. Justification of the execution result and instruction formation. CRITICAL BLOCK: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
 ---
 
-# Debug and Feedback
+# Дебаг и обратная связь
 
-This skill is designed for step-by-step justification of the agent's decisions, providing feedback, and finding errors (debugging) in the processes of **execution** and **formation** of instruction files.
+## Условия вызова
+- [По явному вызову](<./main.md#по-явному-вызову>)
+- [Реагирует на файлы инструкций](<./main.md#реагирует-на-файлы-инструкций>)
 
-## Execution Algorithm
+## Содержание
+# Дебаг и обратная связь
 
-When explicitly invoked by the operator, strictly perform the following steps in the specified order:
+Этот навык предназначен для пошагового обоснования решений агента, предоставления обратной связи и поиска ошибок (отладки) в процессах **выполнения** и **формирования** файлов инструкций.
 
-### Step 1: Initialization and Context Gathering
-1. Analyze the operator's request and determine the subject of debugging: the process of *execution* of existing instructions or the process of *formation* (creation/updating) of instructions.
-2. Use `list_dir` to scan the working directory of instructions (including the `ai_instrs/` folder and its contents).
-3. Read the root rules and terminology files related to the subject of the request (using `view_file`), before accessing local files and drawing conclusions. This is a critical requirement to prevent context loss.
+## Алгоритм выполнения
 
-### Step 2: Conducting Checks
+При явном вызове оператором, строго выполняй следующие шаги в указанном порядке:
 
-**If the subject is Instruction Execution:**
-1. Read the target instruction file and the source code (or artifact) that was generated according to this instruction.
-2. Inspect your own reasoning/thoughts (thinking log) during the execution of the task. Your goal is to understand exactly how the current phrasing of the instructions led the agent to an undesirable result.
-3. Analyze the instruction files themselves to determine exactly where they were inaccurate, ambiguous, or flawed (which caused the faulty logic).
-4. Document all identified shortcomings in the instructions: absence of crucial constraints, abstract concepts instead of strict steps, contradictions, or lack of context.
+### Шаг 1: Инициализация и сбор контекста
+1. Проанализируй запрос оператора и определи предмет отладки: процесс *выполнения* существующих инструкций или процесс *формирования* (создания/обновления) инструкций.
+2. Используй `list_dir` для сканирования текущей директории с инструкциями (включая папку `ai_instrs/` и её содержимое).
+3. Прочитай корневые файлы правил и терминологии, относящиеся к предмету запроса (с помощью `view_file`), прежде чем обращаться к локальным файлам и делать выводы. Это критическое условие для предотвращения потери контекста.
 
-**If the subject is Instruction Formation:**
-1. Read the generated instruction text.
-2. Check the structure: whether formatting rules, completeness, and conciseness are followed.
-3. Check for the presence of abstract philosophical concepts instead of strict imperative steps. Document these as critical errors.
-4. Ensure there are no violations of basic prompt writing rules (redundant positive phrasing, incorrect level of generalization).
+### Шаг 2: Проведение проверок
 
-### Step 3: Generating Error Report and Proposals
-1. Form a structured report for the operator.
-2. **Justification of Instruction Vulnerability:** Based on the analysis of your reasoning, explain why the instructions led the agent to an erroneous result (for example, "the instruction contains a contradictory requirement", "the constraint was described too abstractly, allowing it to be ignored").
-3. Rely only on facts from the file system. Provide exact links to files in the format `[name](<relative/path/to/file.md>)`.
-4. **Proposals for Instruction Correction:** Provide specific text to correct the problematic instructions (translating abstract rules into clear steps, adding new negative prompts, etc.). IT IS STRICTLY FORBIDDEN to make modifications independently — only propose them to the operator as text insertions (code snippets or diff blocks).
+**Если предмет — Выполнение инструкций:**
+1. Прочитай целевой файл инструкции и исходный код (или артефакт), который был сгенерирован по этой инструкции.
+2. Проанализируй собственные рассуждения/мысли (лог размышлений / thinking log) при выполнении задачи. Твоя цель — понять, как именно текущие формулировки инструкций заставили агента прийти к нежелательному результату.
+3. Проанализируй сами файлы инструкций, чтобы определить, где именно они оказались неточными, двусмысленными или ошибочными (что повлекло за собой неверную логику).
+4. Зафиксируй все обнаруженные недостатки в инструкциях: отсутствие важных ограничений, абстрактные концепции вместо строгих шагов, противоречия или нехватка контекста.
 
-## Strict Constraints
-- It is STRICTLY FORBIDDEN to modify any files in the workspace or perform code corrections during the debugging process. The agent is only permitted to read, analyze, and generate a text report with justifications and a plan.
-- It is prohibited to use general phrases or assume system behavior without confirmation by facts from logs or instruction files.
-- Any claim of violation must be accompanied by a link to a specific rule described in the official instructions (for example, rules of style, execution context, or workspace restrictions).
+**Если предмет — Формирование инструкций:**
+1. Прочитай сгенерированный текст инструкции.
+2. Проверь структуру: соблюдаются ли правила оформления, полнота и лаконичность.
+3. Проверь наличие абстрактных философских концепций вместо жестких императивных шагов. Зафиксируй их как критические ошибки.
+4. Убедись, что нет нарушений базовых правил написания промптов (избыточные позитивные формулировки, неправильный уровень обобщения).
+
+### Шаг 3: Генерация отчета об ошибках и предложений
+1. Сформируй структурированный отчет для оператора.
+2. **Обоснование уязвимости инструкций:** На основе анализа своих рассуждений объясни, почему инструкции привели агента к ошибочному результату (например, "инструкция содержит противоречивое требование", "ограничение было описано слишком абстрактно, что позволило его проигнорировать").
+3. Опирайся только на факты из файловой системы. Указывай точные ссылки на файлы в формате `[название](<относительный/путь/к/файлу.md>)`.
+4. **Предложения по исправлению инструкций:** Предоставь конкретные формулировки для исправления проблемных инструкций (перевод абстрактных правил в четкие шаги, добавление новых негативных промптов и т.д.). ЗАПРЕЩЕНО вносить изменения самостоятельно — только предлагай их оператору в виде текстовых вставок (шаблонов кода или diff-блоков).
+
+## Строгие ограничения
+- ЗАПРЕЩЕНО самостоятельно вносить какие-либо изменения в файлы проекта или осуществлять исправление кода в процессе отладки. Разрешено только чтение, анализ и формирование текстового отчета с обоснованием и планом.
+- Запрещено использовать общие фразы или предполагать поведение системы без подтверждения фактами из логов или файлов инструкций.
+- Любое утверждение о нарушении должно сопровождаться ссылкой на конкретное правило, описанное в официальных инструкциях (например, правила стиля, контекста выполнения или ограничения рабочего пространства).

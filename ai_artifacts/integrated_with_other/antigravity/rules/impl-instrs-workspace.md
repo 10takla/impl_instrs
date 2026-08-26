@@ -1,36 +1,41 @@
 ---
-description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even for simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
-trigger: model_decision
+name: "impl-instrs-workspace"
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
+trigger: "model_decision"
 ---
 
-# Workspace
+# Файловая модель и рабочее пространство
 
-You are in an isolated workspace. You must strictly follow these algorithmic steps during any file operations.
+## Условия вызова
+- [Без явного вызова](<./main.md#без-явного-вызова>)
+- [Реагирует на файлы инструкций](<./main.md#реагирует-на-файлы-инструкций>)
 
-## 1. File System Operations
-**Step 1.1:** Separate read and write operations. Read operations (including those outside the working directory) are not restricted.
-**Step 1.2:** When performing ANY write operations (creating, editing, deleting files), first verify that the target path is STRICTLY within the current working directory.
-**Step 1.3:** FORBIDDEN to modify files outside the working directory.
+## Содержание
+Вы обязаны строго соблюдать концепцию рабочего пространства и правила адресации при любой работе с файлами. 
 
-## 2. Path Formatting
-**Step 2.1:** When mentioning or outputting paths to files and folders of the working directory, it is STRICTLY FORBIDDEN to use absolute paths.
-**Step 2.2:** Use exclusively one of two formats:
-- Relative path from the root of the working directory.
-- Relative path from the location of the current file.
+### 1. Рабочее пространство
+**Шаг 1.1:** Вашим рабочим пространством является текущая директория выполнения (`./`). Все релевантные для вас инструкции и артефакты проекта располагаются строго внутри этого пространства.
+**Шаг 1.2:** Не пытайтесь искать инструкции за пределами рабочего пространства, так как там они для вас не существуют.
 
-## 3. Instruction Discovery
-**Step 3.1:** If your task involves searching for or recognizing instructions, use strictly the following folder patterns for the search (where `<keyword>` is `ai_instrs`):
+### 2. Форматирование путей
+**Шаг 2.1:** При упоминании, формировании или выводе путей к файлам и папкам КАТЕГОРИЧЕСКИ ЗАПРЕЩАЕТСЯ использовать абсолютные пути.
+**Шаг 2.2:** Используйте исключительно один из двух форматов:
+- Относительный путь от текущего расположения.
+- Относительный путь от расположения целевого файла или инструкции.
+
+### 3. Обнаружение инструкций
+**Шаг 3.1:** Если ваша задача включает поиск или распознавание инструкций, используйте для поиска строго следующие паттерны папок (где `<keyword>` это `ai_instrs`):
 - `ai_instrs/`
-- `*.<keyword>/` (for example: `name.ai_instrs/`)
-- `<keyword>.*/` (for example: `ai_instrs.name/`)
-*All files inside discovered folders are considered instructions.*
+- `*.<keyword>/` (например: `name.ai_instrs/`)
+- `<keyword>.*/` (например: `ai_instrs.name/`)
+*Все файлы внутри обнаруженных папок считаются инструкциями.*
 
-**Step 3.2:** Check each discovered instruction folder for `_.md`. If present, treat it as the parent instruction inheriting the folder name and the other files as its subinstructions. If absent, preserve the same hierarchy implicitly: treat the folder name as the parent level and the other files as subinstructions.
+**Шаг 3.2:** Для каждой обнаруженной папки инструкций проверьте наличие файла `_.md`. Если он есть, считайте его родительской инструкцией, наследующей имя папки, а остальные файлы — её подинструкциями. Если его нет, сохраняйте ту же иерархию неявно: считайте имя папки родительским уровнем, а остальные файлы — подинструкциями.
 
-**Step 3.3:** Use strictly the following patterns for searching single instruction files:
-- `ai_instrs.<extension>`
-- `*.ai_instrs.<extension>`
+**Шаг 3.3:** Используйте для поиска одиночных файлов инструкций строго следующие паттерны:
+- `ai_instrs.<расширение>`
+- `*.ai_instrs.<расширение>`
 
-## 4. Saving Artifacts
-**Step 4.1:** If you generate files, scripts, reports, or other artifacts, and the context of the task does not specify a specific location to save them, you must save them in the `./ai_artifacts/` directory.
-**Step 4.2:** The `./ai_artifacts/` path should be constructed relative to the instruction file (highest priority) or relative to the root of the working directory (if the instruction is not bound to a specific path).
+### 4. Сохранение артефактов
+**Шаг 4.1:** Если вы генерируете файлы, скрипты, отчеты или иные побочные артефакты, и в контексте задачи не указано конкретное место для их сохранения, вы обязаны сохранить их в директорию `./ai_artifacts/`.
+**Шаг 4.2:** Этот путь должен строиться относительно файла инструкции (наивысший приоритет) или относительно текущей директории выполнения.

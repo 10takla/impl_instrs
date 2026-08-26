@@ -1,8 +1,15 @@
 ---
 name: "instr-execution"
-description: "Выполняет указанную оператором инструкцию только после проактивного сбора контекста. Применяется к файлам и папкам по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
 ---
 
+# Выполнение инструкций
+
+## Условия вызова
+- [По явному вызову](<./main.md#по-явному-вызову>)
+- [Реагирует на файлы инструкций](<./main.md#реагирует-на-файлы-инструкций>)
+
+## Содержание
 При явном вызове этого скилла выполните указанную оператором инструкцию только после проактивного сбора контекста.
 
 ### Шаг 1: Изучите корневую структуру

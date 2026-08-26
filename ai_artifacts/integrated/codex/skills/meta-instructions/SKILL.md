@@ -1,8 +1,15 @@
 ---
 name: "meta-instructions"
-description: "Создаёт и изменяет мета-инструкции на любом уровне абстракции. Применяется к файлам и папкам по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
 ---
 
+# Мета-инструкции
+
+## Условия вызова
+- [По явному вызову](<./main.md#по-явному-вызову>)
+- [Реагирует на файлы инструкций](<./main.md#реагирует-на-файлы-инструкций>)
+
+## Содержание
 # Мета-инструкции
 
 **Суть:** Способность писать инструкции на любом уровне, в том числе инструкции для инструкций.
@@ -32,4 +39,4 @@ description: "Создаёт и изменяет мета-инструкции �
 
 ### Шаг 5. Применение
 1. Сформируй имя файла, строго соответствующее паттернам обнаружения (например, `название.ai_instrs.md`).
-2. Сохрани файл в рабочей директории, используя исключительно разрешенные относительные пути.
+2. Сохрани файл в текущей директории, используя исключительно разрешенные относительные пути.

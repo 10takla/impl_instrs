@@ -1,7 +1,14 @@
 ---
 name: "impl-instrs:reverse-engineer-instr"
-description: ""
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
 ---
+
+# Реверс-инжиниринг
+
+## Условия вызова
+- [По явному вызову](<./main.md#по-явному-вызову>)
+
+## Содержание
 
 # Скилл: Реверс-инжиниринг инструкций
 

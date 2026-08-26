@@ -1,36 +1,43 @@
 ---
 name: "impl-instrs:reverse-engineer-instr"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Translate an existing implementation or artifacts back into strict AI instructions."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
 ---
 
-# Skill: Reverse Engineering Instructions
+# Реверс-инжиниринг
 
-This skill translates an existing result (completed code, architecture, artifacts) back into the format of strict text instructions for AI agents. Your main task is to create a base of rules and algorithms, relying on which the agent will be able to independently recreate the current result from scratch.
+## Условия вызова
+- [По явному вызову](<./main.md#по-явному-вызову>)
 
-## Strict Imperative Workflow Algorithm
+## Содержание
 
-**Step 1. Study the target object (result)**
-1. Request from the operator (if not specified initially) absolute paths to files or directories whose implementation needs to be translated into instructions.
-2. Use `list_dir` to review the structure and `view_file` to study the source code and artifacts in detail.
-3. Analyze how the implementation functions, what patterns are used, and what the architectural and business requirements are.
+# Скилл: Реверс-инжиниринг инструкций
 
-**Step 2. Translation of concepts into mechanical steps**
-1. Decompose the studied implementation into logical blocks (for example: "File structure", "Architectural decisions", "Business logic", "Formatting rules").
-2. For each block, formulate specific, step-by-step instructions for the LLM.
-   - **IT IS FORBIDDEN** to describe the current state using abstract concepts (for example: "the agent understands the structure").
-   - **IT IS MANDATORY** to translate abstractions into a shared knowledge base and actions, formulate rules in the imperative mood (for example: "Step 1: do `list_dir` of directory X", "Use pattern Y").
-3. The final instructions must represent a strict algorithm that eliminates ambiguity.
+Данный навык (скилл) переводит существующий результат (готовый код, архитектуру, артефакты) обратно в формат строгих текстовых инструкций для ИИ-агентов. Ваша главная задача — создать базу правил и алгоритмов, опираясь на которую агент сможет самостоятельно воссоздать текущий результат с нуля.
 
-**Step 3. Designing the structure of instruction files**
-1. Plan the structure for saving the rules (usually in the `ai_instrs/` folder of the project).
-2. When `_.md` is present, use it as the parent instruction named after the folder and the other files as subinstructions.
-3. When `_.md` is absent, preserve the hierarchy implicitly: the folder name is the parent level and the other files are subinstructions.
+## Жёсткий императивный алгоритм работы
 
-**Step 4. Physical creation of instructions**
-1. Use `write_to_file` to create all planned Markdown files.
-2. **MANDATORY**: when forming links between instruction files, strictly follow the syntax: paths in links `[]()` must be wrapped in angle brackets `(<path>)` (example: `[Module](<./module.md>)`).
+**Шаг 1. Изучение целевого объекта (результата)**
+1. Запросите у оператора (если не указано изначально) абсолютные пути к файлам или директориям, реализацию которых нужно перевести в инструкции.
+2. Используйте `list_dir` для обзора структуры и `view_file` для детального изучения исходного кода и артефактов.
+3. Проанализируйте, как функционирует реализация, какие паттерны используются, какова архитектура и бизнес-требования.
 
-**Step 5. Completion and reporting**
-1. Stop calling editing tools after all files have been saved.
-2. Generate a brief and clear report for the operator with a list of all created files (as clickable links).
-3. Specify the main concepts that were successfully translated into the format of AI instructions. Await further commands.
+**Шаг 2. Трансляция концепций в механические шаги**
+1. Декомпозируйте изученную реализацию на логические блоки (например: "Файловая структура", "Архитектурные решения", "Бизнес-логика", "Правила оформления").
+2. Для каждого блока сформулируйте конкретные, пошаговые инструкции для LLM.
+   - **ЗАПРЕЩАЕТСЯ** описывать текущее состояние абстрактными понятиями (например: "агент осознаёт структуру").
+   - **ОБЯЗАТЕЛЬНО** переводите абстракции в совместную базу знаний и действий, формулируйте правила в повелительном наклонении (например: "Шаг 1: сделай `list_dir` директории X", "Используй паттерн Y").
+3. Итоговые инструкции должны представлять собой жесткий алгоритм, исключающий двусмысленность.
+
+**Шаг 3. Проектирование структуры файлов инструкций**
+1. Спланируйте структуру сохранения правил (обычно в папке `ai_instrs/` проекта).
+2. При наличии `_.md` используйте его как родительскую инструкцию с именем папки, а остальные файлы — как подинструкции.
+3. При отсутствии `_.md` сохраните иерархию неявной: имя папки — родительский уровень, остальные файлы — подинструкции.
+
+**Шаг 4. Физическое создание инструкций**
+1. Используйте `write_to_file` для создания всех запланированных Markdown-файлов.
+2. **ОБЯЗАТЕЛЬНО**: при формировании ссылок между файлами инструкций строго соблюдайте синтаксис: пути в ссылках `[]()` должны быть обернуты в угловые скобки `(<путь>)` (пример: `[Модуль](<./module.md>)`).
+
+**Шаг 5. Завершение и отчетность**
+1. Прекратите вызовы инструментов редактирования после сохранения всех файлов.
+2. Сформируйте краткий и четкий отчет для оператора со списком всех созданных файлов (в виде кликабельных ссылок).
+3. Укажите основные концепции, которые удалось успешно перевести в формат ИИ-инструкций. Ожидайте дальнейших команд.

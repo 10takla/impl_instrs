@@ -1,5 +1,5 @@
 ---
-description: "Path formatting rule in Markdown files to preserve spaces"
+description: "Правило форматирования путей в Markdown-файлах для сохранения пробелов"
 trigger: glob
 globs: "**/*.md"
 ---
