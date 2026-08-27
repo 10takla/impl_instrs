@@ -6,9 +6,9 @@
       "type": "shell",
       "command": "node",
       "args": [
-        "${workspaceFolder}/ai_artifacts/integrate.js",
-        "drafts",
-        "integrated",
+        "ai_artifacts/integrate.js",
+        "drafts_en",
+        "integrated_en",
         "--watch"
       ],
       "isBackground": true,
