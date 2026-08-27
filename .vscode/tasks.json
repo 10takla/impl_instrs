@@ -5,7 +5,12 @@
       "label": "Integrate Drafts (Watch)",
       "type": "shell",
       "command": "node",
-      "args": ["ai_artifacts/integrate.js", "--watch"],
+      "args": [
+        "${workspaceFolder}/ai_artifacts/integrate.js",
+        "drafts",
+        "integrated",
+        "--watch"
+      ],
       "isBackground": true,
       "problemMatcher": {
         "pattern": {

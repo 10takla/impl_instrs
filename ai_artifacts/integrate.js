@@ -339,14 +339,32 @@ function watchDrafts(sourceDir, outputDir) {
   });
 }
 
+function resolvePath(arg, defaultPath) {
+  if (!arg) return defaultPath;
+  if (path.isAbsolute(arg)) return arg;
+  const cwdResolved = path.resolve(arg);
+  if (fs.existsSync(cwdResolved)) return cwdResolved;
+  const rootResolved = path.resolve(__dirname, arg);
+  if (fs.existsSync(rootResolved)) return rootResolved;
+  if (arg.includes('/') || arg.includes('\\')) {
+    return cwdResolved;
+  }
+  return rootResolved;
+}
+
 function main() {
   const args = process.argv.slice(2);
   const isWatch = args.includes('--watch') || args.includes('-w');
   const positionalArgs = args.filter((arg) => arg !== '--watch' && arg !== '-w');
 
-  const root = __dirname;
-  const sourceDir = positionalArgs[0] ? path.resolve(positionalArgs[0]) : path.join(root, 'drafts');
-  const outputDir = positionalArgs[1] ? path.resolve(positionalArgs[1]) : path.join(root, 'integrated');
+  if (positionalArgs.length < 2) {
+    console.error('Ошибка: Обязательно укажите аргументы <draftsDir> и <outputDir>.');
+    console.error('Использование: node integrate.js <draftsDir> <outputDir> [--watch]');
+    process.exit(1);
+  }
+
+  const sourceDir = resolvePath(positionalArgs[0], positionalArgs[0]);
+  const outputDir = resolvePath(positionalArgs[1], positionalArgs[1]);
 
   if (isWatch) {
     watchDrafts(sourceDir, outputDir);
@@ -358,3 +376,4 @@ function main() {
 if (require.main === module) {
   main();
 }
+
