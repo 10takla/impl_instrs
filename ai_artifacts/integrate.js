@@ -1,9 +1,59 @@
 #!/usr/bin/env node
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
+const { pathToFileURL } = require('url');
 
 const DESCRIPTION_REACTS_TO_INSTRUCTIONS =
   "КРИТИЧЕСКАЯ БЛОКИРОВКА: ВЫ ОБЯЗАНЫ прочитать это перед ЛЮБЫМ взаимодействием (даже при простом исправлении опечаток) с файлами и папками по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. Файл содержит нестандартные правила, которые отменяют ваши базовые знания по умолчанию. Вы провалите задачу, если проигнорируете это.";
+
+const EXPLICIT_DRAFT_REFERENCE_FORMATTERS = {
+  antigravity: (name) => `[impl-instrs:${name}](slashCommand;impl-instrs:${name})`,
+  codex: (name) => `$impl-instrs:${name}`,
+  'claude-code': (name) => `/impl-instrs:${name}`,
+  opencode: (name) => `/impl-instrs-${name}`
+};
+
+const ANTIGRAVITY_PLUGIN_DIR = process.env.ANTIGRAVITY_PLUGIN_DIR || path.join(
+  os.homedir(),
+  '.gemini',
+  'config',
+  'plugins',
+  'impl_instrs'
+);
+
+const IMPLICIT_DRAFT_REFERENCE_FORMATTERS = {
+  antigravity: (name) => {
+    const ruleUri = pathToFileURL(
+      path.join(ANTIGRAVITY_PLUGIN_DIR, 'rules', `impl-instrs-${name}.md`)
+    ).href;
+    return `[impl-instrs-${name}.md](*rule;${ruleUri}*)`;
+  },
+  codex: (name) => `$impl-instrs:${name}`,
+  'claude-code': (name) => `/impl-instrs:${name}`,
+  opencode: (name) => `/impl-instrs-${name}`
+};
+
+function compileContent(content, manager, draftsByName) {
+  return content.replace(/@draft\(([a-z0-9]+(?:-[a-z0-9]+)*)\)/g, (_, name) => {
+    const draft = draftsByName.get(name);
+    if (!draft) {
+      throw new Error(`Черновик "${name}" из @draft не найден.`);
+    }
+
+    const isExplicit = draft.meta.conditions.includes('explicit_invocation');
+    const isImplicit = draft.meta.conditions.includes('implicit_invocation') ||
+      Boolean(draft.meta.trigger || draft.meta.globs);
+    if (isExplicit && isImplicit) {
+      throw new Error(`Черновик "${name}" одновременно явный и неявный.`);
+    }
+
+    const formatters = isImplicit
+      ? IMPLICIT_DRAFT_REFERENCE_FORMATTERS
+      : EXPLICIT_DRAFT_REFERENCE_FORMATTERS;
+    return formatters[manager](name);
+  });
+}
 
 function parseMeta(content) {
   const conditions = [];
@@ -123,6 +173,14 @@ function compile(sourceDir, outputDir) {
 
   console.log(`[+] Найдено черновиков: ${drafts.length} в "${sourceDir}"`);
 
+  const draftsByName = new Map();
+  for (const draft of drafts) {
+    if (draftsByName.has(draft.name)) {
+      throw new Error(`Повторяющееся имя черновика: "${draft.name}".`);
+    }
+    draftsByName.set(draft.name, draft);
+  }
+
   let hasExplicit = false;
 
   for (const draft of drafts) {
@@ -131,6 +189,10 @@ function compile(sourceDir, outputDir) {
     const isImplicit = meta.conditions.includes('implicit_invocation');
     const reacts = meta.conditions.includes('reacts_to_instruction_files');
     const hasCustomTrigger = Boolean(meta.trigger || meta.globs);
+    const antigravityContent = compileContent(content, 'antigravity', draftsByName);
+    const codexContent = compileContent(content, 'codex', draftsByName);
+    const claudeCodeContent = compileContent(content, 'claude-code', draftsByName);
+    const openCodeContent = compileContent(content, 'opencode', draftsByName);
 
     if (isExplicit) hasExplicit = true;
 
@@ -149,7 +211,7 @@ function compile(sourceDir, outputDir) {
       if (meta.globs) {
         lines.push(`globs: ${JSON.stringify(meta.globs)}`);
       }
-      lines.push('---', '', content);
+      lines.push('---', '', antigravityContent);
       writeFile(path.join(outputDir, 'antigravity', 'rules', `impl-instrs-${name}.md`), lines.join('\n'));
     } else {
       const frontmatter = [
@@ -158,7 +220,7 @@ function compile(sourceDir, outputDir) {
         `description: ${JSON.stringify(description)}`,
         '---',
         '',
-        content
+        antigravityContent
       ].join('\n');
       writeFile(path.join(outputDir, 'antigravity', 'skills', name, 'SKILL.md'), frontmatter);
     }
@@ -171,7 +233,7 @@ function compile(sourceDir, outputDir) {
         `description: ${JSON.stringify(description)}`,
         '---',
         '',
-        content
+        codexContent
       ].join('\n');
       writeFile(path.join(outputDir, 'codex', 'skills', name, 'SKILL.md'), frontmatter);
     }
@@ -189,7 +251,7 @@ function compile(sourceDir, outputDir) {
       if (isImplicit && !hasCustomTrigger) {
         lines.push('user-invocable: false');
       }
-      lines.push('---', '', content);
+      lines.push('---', '', claudeCodeContent);
       writeFile(path.join(outputDir, 'claude-code', 'skills', name, 'SKILL.md'), lines.join('\n'));
     }
 
@@ -201,7 +263,7 @@ function compile(sourceDir, outputDir) {
         `description: ${JSON.stringify(description)}`,
         '---',
         '',
-        content
+        openCodeContent
       ].join('\n');
       writeFile(path.join(outputDir, 'opencode', 'skills', `impl-instrs-${name}`, 'SKILL.md'), frontmatter);
     } else {
@@ -211,7 +273,7 @@ function compile(sourceDir, outputDir) {
         `description: ${JSON.stringify(description)}`,
         '---',
         '',
-        content
+        openCodeContent
       ].join('\n');
       writeFile(path.join(outputDir, 'opencode', 'commands', `impl-instrs-${name}.md`), frontmatter);
     }
