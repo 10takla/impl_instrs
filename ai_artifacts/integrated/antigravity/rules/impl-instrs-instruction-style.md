@@ -4,6 +4,8 @@ description: "КРИТИЧЕСКАЯ БЛОКИРОВКА: ВЫ ОБЯЗАНЫ �
 trigger: "model_decision"
 ---
 
+**Связанные правила:** [impl-instrs-instr-context.md](*rule;file:///C:/Users/root/.gemini/config/plugins/impl_instrs/rules/impl-instrs-instr-context.md*).
+
 При создании или редактировании любых файлов инструкций, ТЫ ОБЯЗАН построчно выполнить следующий алгоритм:
 
 ### ШАГ 1: Обеспечь "Целевую полноту"

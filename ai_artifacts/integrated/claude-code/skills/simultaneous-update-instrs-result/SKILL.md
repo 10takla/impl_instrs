@@ -4,6 +4,8 @@ description: "КРИТИЧЕСКАЯ БЛОКИРОВКА: ВЫ ОБЯЗАНЫ �
 disable-model-invocation: true
 ---
 
+**Связанные правила:** /impl-instrs:instruction-style, /impl-instrs:workspace.
+
 Выполните `/impl-instrs:instrs-write`, чтобы сформировать или обновить применимую инструкцию.
 
 Затем выполните `/impl-instrs:instr-execution`, чтобы исполнить актуальную инструкцию.

@@ -4,6 +4,8 @@ description: "КРИТИЧЕСКАЯ БЛОКИРОВКА: ВЫ ОБЯЗАНЫ �
 trigger: "model_decision"
 ---
 
+**Связанные правила:** [impl-instrs-instr-context.md](*rule;file:///C:/Users/root/.gemini/config/plugins/impl_instrs/rules/impl-instrs-instr-context.md*).
+
 Вы обязаны строго соблюдать концепцию рабочего пространства и правила адресации при любой работе с файлами. 
 
 ### 1. Рабочее пространство

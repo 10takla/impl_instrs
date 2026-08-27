@@ -3,6 +3,8 @@ name: "impl-instrs:reverse-engineer-instr"
 description: ""
 ---
 
+**Связанные правила:** [impl-instrs-instruction-style.md](*rule;file:///C:/Users/root/.gemini/config/plugins/impl_instrs/rules/impl-instrs-instruction-style.md*), [impl-instrs-workspace.md](*rule;file:///C:/Users/root/.gemini/config/plugins/impl_instrs/rules/impl-instrs-workspace.md*).
+
 Данный навык (скилл) переводит существующий результат (готовый код, архитектуру, артефакты) обратно в формат строгих текстовых инструкций для ИИ-агентов. Ваша главная задача — создать базу правил и алгоритмов, опираясь на которую агент сможет самостоятельно воссоздать текущий результат с нуля.
 
 ## Жёсткий императивный алгоритм работы
