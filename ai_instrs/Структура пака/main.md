@@ -28,6 +28,9 @@
 - [](</ai_instrs.concept/Стиль инструкций.md#функциональные-инструкции>)
 - [](</ai_instrs.concept/Стиль инструкций.md#комбинирование-инструкций>)
 
+**Связи:**
+- `@draft(instr-context)`
+
 **Обязательные условия вызова:**
 - Режим: [`implicit_invocation`](<#implicit_invocation>)
 - Область применения: [`reacts_to_instruction_files`](<#reacts_to_instruction_files>)
@@ -39,6 +42,10 @@
 В него входит:
 - [Инкрементальное обновление результата](</ai_instrs.concept/Состав пака/main.md#инкрементальное-обновление-результата>)
 
+**Связи:**
+- `@draft(instruction-style)`
+- `@draft(workspace)`
+
 **Обязательные условия вызова:**
 - Режим: [`explicit_invocation`](<#explicit_invocation>)
 - Область применения: [`reacts_to_instruction_files`](<#reacts_to_instruction_files>)
@@ -46,6 +53,9 @@
 
 #### workspace - Рабочее пространство
 [Концепт](</ai_instrs.concept/Состав пака/main.md#структура-файлов-и-рабочее-пространство>)
+
+**Связи:**
+- `@draft(instr-context)`
 
 **Обязательные условия вызова:**
 - Режим: [`implicit_invocation`](<#implicit_invocation>)
@@ -59,6 +69,10 @@
 - [Инкрементальное обновление результата](</ai_instrs.concept/Состав пака/main.md#инкрементальное-обновление-результата>)
 - [Изоляция контекста](</ai_instrs.concept/Общие/Изоляция контекста.md>)
 
+**Связи:**
+- `@draft(instruction-style)`
+- `@draft(workspace)`
+
 **Обязательные условия вызова:**
 - Режим: [`explicit_invocation`](<#explicit_invocation>)
 - Область применения: [`reacts_to_instruction_files`](<#reacts_to_instruction_files>)
@@ -66,6 +80,10 @@
 
 #### reverse-engineer-instr - Реверс-инжиниринг
 [Концепт](</ai_instrs.concept/Состав пака/main.md#реверс-инжиниринг>)
+
+**Связи:**
+- `@draft(instruction-style)`
+- `@draft(workspace)`
 
 **Обязательные условия вызова:**
 - Режим: [`explicit_invocation`](<#explicit_invocation>)
@@ -77,6 +95,10 @@
 На основе:
 - [структуры файлов](</ai_instrs.concept/Состав пака/main.md#структура-файлов-и-рабочее-пространство>)
 - [Изоляция контекста](</ai_instrs.concept/Общие/Изоляция контекста.md>)
+
+**Связи:**
+- `@draft(instruction-style)`
+- `@draft(workspace)`
 
 **Обязательные условия вызова:**
 - Режим: [`explicit_invocation`](<#explicit_invocation>)
@@ -92,6 +114,10 @@
 1. `@draft(instrs-write)` — сформируй или обнови инструкцию.
 2. `@draft(instr-execution)` — выполни актуальную инструкцию.
 
+**Связи:**
+- `@draft(instruction-style)`
+- `@draft(workspace)`
+
 **Обязательные условия вызова:**
 - Режим: [`explicit_invocation`](<#explicit_invocation>)
 - Область применения: [`reacts_to_instruction_files`](<#reacts_to_instruction_files>)
@@ -100,6 +126,10 @@
 #### debug-feedback - Дебаг и обратная связь
 [Концепт](</ai_instrs.concept/Состав пака/main.md#дебаг-и-обратная-связь>)
 
+**Связи:**
+- `@draft(instruction-style)`
+- `@draft(workspace)`
+
 **Обязательные условия вызова:**
 - Режим: [`explicit_invocation`](<#explicit_invocation>)
 - Область применения: [`reacts_to_instruction_files`](<#reacts_to_instruction_files>)
@@ -107,6 +137,10 @@
 
 #### meta-instructions - Мета-инструкции
 [Концепт](</ai_instrs.concept/Состав пака/main.md#мета-инструкции>)
+
+**Связи:**
+- `@draft(instruction-style)`
+- `@draft(workspace)`
 
 **Обязательные условия вызова:**
 - Режим: [`explicit_invocation`](<#explicit_invocation>)
