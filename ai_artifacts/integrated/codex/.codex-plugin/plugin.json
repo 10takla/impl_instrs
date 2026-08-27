@@ -1,4 +1,5 @@
 {
   "name": "impl-instrs",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "description": "Система модульных инструкций и правил для AI-агентов"
 }

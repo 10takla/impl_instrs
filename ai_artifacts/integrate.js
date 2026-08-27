@@ -4,6 +4,20 @@ const os = require('os');
 const path = require('path');
 const { pathToFileURL } = require('url');
 
+function readManifest(sourceDir) {
+  const manifestPath = path.join(sourceDir, 'manifest.yaml');
+  const defaults = { name: 'impl-instrs', version: '1.0.0', description: '', managers: {} };
+  if (!fs.existsSync(manifestPath)) return defaults;
+
+  const text = fs.readFileSync(manifestPath, 'utf8');
+  const result = { ...defaults };
+  for (const line of text.split(/\r?\n/)) {
+    const m = line.match(/^(name|version|description):\s*(.*?)\s*$/);
+    if (m) result[m[1]] = m[2].replace(/^["']|["']$/g, '').trim();
+  }
+  return result;
+}
+
 const DESCRIPTION_REACTS_TO_INSTRUCTIONS =
   "КРИТИЧЕСКАЯ БЛОКИРОВКА: ВЫ ОБЯЗАНЫ прочитать это перед ЛЮБЫМ взаимодействием (даже при простом исправлении опечаток) с файлами и папками по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. Файл содержит нестандартные правила, которые отменяют ваши базовые знания по умолчанию. Вы провалите задачу, если проигнорируете это.";
 
@@ -173,6 +187,10 @@ function compile(sourceDir, outputDir) {
 
   console.log(`[+] Найдено черновиков: ${drafts.length} в "${sourceDir}"`);
 
+  const manifest = readManifest(sourceDir);
+  console.log(`[+] Манифест: ${manifest.name}@${manifest.version}`);
+
+
   const draftsByName = new Map();
   for (const draft of drafts) {
     if (draftsByName.has(draft.name)) {
@@ -282,12 +300,12 @@ function compile(sourceDir, outputDir) {
   // Манифесты
   writeFile(
     path.join(outputDir, 'antigravity', 'plugin.json'),
-    JSON.stringify({ name: 'impl-instrs', version: '1.0.0' }, null, 2) + '\n'
+    JSON.stringify({ name: manifest.name, version: manifest.version, description: manifest.description }, null, 2) + '\n'
   );
 
   writeFile(
     path.join(outputDir, 'codex', '.codex-plugin', 'plugin.json'),
-    JSON.stringify({ name: 'impl-instrs', version: '1.0.0' }, null, 2) + '\n'
+    JSON.stringify({ name: manifest.name, version: manifest.version, description: manifest.description }, null, 2) + '\n'
   );
 
   if (hasExplicit) {
@@ -297,9 +315,10 @@ function compile(sourceDir, outputDir) {
     );
   }
 
+  const claudeManifest = { name: manifest.name, version: manifest.version, description: manifest.description, type: 'skills-directory' };
   writeFile(
     path.join(outputDir, 'claude-code', '.claude-plugin', 'plugin.json'),
-    JSON.stringify({ name: 'impl-instrs', version: '1.0.0', type: 'skills-directory' }, null, 2) + '\n'
+    JSON.stringify(claudeManifest, null, 2) + '\n'
   );
 
   console.log(`[✓] Успешно скомпилировано в "${outputDir}" для 4 менеджеров агентов.`);
