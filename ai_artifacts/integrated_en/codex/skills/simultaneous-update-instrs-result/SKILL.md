@@ -1,10 +1,10 @@
 ---
 name: "simultaneous-update-instrs-result"
-description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
+description: "КРИТИЧЕСКАЯ БЛОКИРОВКА: ВЫ ОБЯЗАНЫ прочитать это перед ЛЮБЫМ взаимодействием (даже при простом исправлении опечаток) с файлами и папками по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. Файл содержит нестандартные правила, которые отменяют ваши базовые знания по умолчанию. Вы провалите задачу, если проигнорируете это."
 ---
 
 **Related rules:** $impl-instrs:instruction-style, $impl-instrs:workspace.
 
-Execute `$impl-instrs:instrs-write` to author or update the applicable instruction.
+Execute $impl-instrs:instrs-write to formulate or update the applicable instruction.
 
-Then execute `$impl-instrs:instr-execution` to execute the current instruction.
+Then execute $impl-instrs:instr-execution to execute the updated instruction.

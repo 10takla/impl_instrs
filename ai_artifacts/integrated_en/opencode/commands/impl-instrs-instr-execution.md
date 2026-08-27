@@ -1,47 +1,47 @@
 ---
 name: "impl-instrs-instr-execution"
-description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
+description: "КРИТИЧЕСКАЯ БЛОКИРОВКА: ВЫ ОБЯЗАНЫ прочитать это перед ЛЮБЫМ взаимодействием (даже при простом исправлении опечаток) с файлами и папками по паттернам: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. Файл содержит нестандартные правила, которые отменяют ваши базовые знания по умолчанию. Вы провалите задачу, если проигнорируете это."
 ---
 
 **Related rules:** /impl-instrs-instruction-style, /impl-instrs-workspace.
 
-When this skill is explicitly invoked, execute the instruction specified by the operator only after proactively gathering context.
+Upon explicit invocation of this skill, execute the instruction specified by the operator only after proactive context gathering.
 
-### Step 1: Study the Root Structure
+### Step 1: Examine the Root Structure
 Regardless of how specific the operator's request is, first obtain the structure of the root instruction directory.
 
-Even if the operator provided an exact path, line, or section, that does not cancel the initial study of the instruction structure.
+Even if the operator specified an exact path, line, or section, this does not waive the requirement for primary exploration of the instruction structure.
 
-### Step 2: Read the Basic Terminology
-Identify root reference files related to terms, concepts, and the structure of instructions.
+### Step 2: Read Base Terminology
+Identify root reference files related to terms, concepts, and instruction structure.
 
-Read these files before moving on to the local task files.
+Read these files before proceeding to the local files of the task.
 
-Do not ignore this step under the pretext of imagined task simplicity.
+Do not ignore this step under the pretext of apparent task simplicity.
 
-### Step 3: Find Adjacent Context
-Thoughtfully analyze directory names, file names, and links inside the instructions you have read.
+### Step 3: Find Related Context
+Meaningfully analyze directory and file names and links within the read instructions.
 
-Find adjacent instructions that may affect the understanding of the target instruction.
+Find related instructions that may influence the understanding of the target instruction.
 
-Use targeted reading. Avoid full scanning unless it is required to understand the target instruction.
+Use targeted reading. Avoid full scans unless required to understand the target instruction.
 
-### Step 4: Obtain the Current State of the Requirements
-Immediately before execution, obtain the current state of the target instruction from its actual source. If the instruction is stored in a file, reread the file or fragment specified by the operator from the file system.
+### Step 4: Obtain the Current State of Requirements
+Immediately before execution, obtain the current state of the target instruction from its actual source. If the instruction is stored in a file, re-read the file or fragment specified by the operator from the file system.
 
-Treat the obtained state of the requirements as the source of truth. Do not execute the instruction from a copy retained in context.
+Treat the retrieved requirement state as the source of truth. Do not execute the instruction from a copy cached in context.
 
 ### Step 5: Obtain the Existing State of the Result
-If a result from a previous execution exists, obtain its current state from its actual source.
+If a result from prior execution exists, obtain its current state from the actual source.
 
-Do not use a copy of the result retained in context instead of checking its current state.
+Do not use a result copy cached in context instead of checking its current state.
 
 ### Step 6: Form the New State of the Result
-Reconcile the current state of the requirements with the existing state of the result. Apply the necessary additions, changes, and removals while preserving unaffected parts.
+Compare the current requirement state with the existing result state. Apply necessary additions, changes, and removals, preserving untouched parts.
 
-If the operator requested an independent new result, create it without changing the previous result.
+If the operator requested an independent new result, create it without modifying the previous result.
 
 All actions must rely on the gathered context, terminology, and applicable constraints.
 
 ### Critical Rule
-Do not economize on context. The agent is not allowed to skip reading global terminology and root files before executing an instruction.
+Do not skimp on context. The agent has no authority to skip reading global terminology and root files before executing an instruction.
