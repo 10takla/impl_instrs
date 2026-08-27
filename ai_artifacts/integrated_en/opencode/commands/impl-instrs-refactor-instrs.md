@@ -1,9 +1,9 @@
 ---
 name: "impl-instrs-refactor-instrs"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via slash command. Refactor instruction files to optimize structure and isolate context while preserving the original semantics. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'"
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
 ---
 
-# Skill: Refactor Instructions
+**Related rules:** /impl-instrs-instruction-style, /impl-instrs-workspace.
 
 This skill provides a strict imperative algorithm for reorganizing and improving existing instruction files. Its main goal is to preserve the semantics of the original instructions while improving the file structure and ensuring strict context isolation for better task execution by agents.
 
@@ -22,9 +22,9 @@ When this skill is invoked by the operator, strictly follow the step-by-step alg
 
 ### Step 3: File Structure Design
 1. Plan the new file and folder hierarchy.
-2. **Path Constraints:** When mentioning paths to files and folders, use **only relative paths** (from the working directory or from files within it). The use of absolute paths is strictly prohibited.
+2. **Path Constraints:** When mentioning paths to files and folders, use **only relative paths** (from the current location or target files). The use of absolute paths is strictly prohibited.
 3. Ensure that the new names match the instruction discovery patterns (for example, the `ai_instrs/` folder or the `.ai_instrs.md` file suffix).
-4. **Artifacts:** If you need to create a plan, report, or script during the refactoring process, save it in the `./ai_artifacts/` directory (relative to the instruction file or the working directory).
+4. **Artifacts:** If you need to create a plan, report, or script during the refactoring process, save it in the `./ai_artifacts/` directory (relative to the instruction file or the current location).
 
 ### Step 4: Applying Changes
 1. Use `write_to_file` to create new instruction files and `replace_file_content` (or `multi_replace_file_content`) to update existing ones.

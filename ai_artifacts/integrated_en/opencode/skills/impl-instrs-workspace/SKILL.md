@@ -1,34 +1,35 @@
 ---
 name: "impl-instrs-workspace"
-description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even for simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default base knowledge. You will fail the task if you ignore this."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
 ---
 
-# Workspace
+**Related rules:** /impl-instrs-instr-context.
 
-You are in an isolated workspace. You must strictly follow these algorithmic steps during any file operations.
+You are required to strictly adhere to the workspace concept and addressing rules during any work with files.
 
-## 1. File System Operations
-**Step 1.1:** Separate read and write operations. Read operations (including those outside the working directory) are not restricted.
-**Step 1.2:** When performing ANY write operations (creating, editing, deleting files), first verify that the target path is STRICTLY within the current working directory.
-**Step 1.3:** FORBIDDEN to modify files outside the working directory.
+### 1. Workspace
+**Step 1.1:** Your workspace is the current execution directory (`./`). All project instructions and artifacts relevant to you are located strictly within this space.
+**Step 1.2:** Do not attempt to search for instructions outside the workspace, as they do not exist for you there.
 
-## 2. Path Formatting
-**Step 2.1:** When mentioning or outputting paths to files and folders of the working directory, it is STRICTLY FORBIDDEN to use absolute paths.
+### 2. Path Formatting
+**Step 2.1:** When mentioning, formulating, or outputting paths to files and folders, IT IS STRICTLY FORBIDDEN to use absolute paths.
 **Step 2.2:** Use exclusively one of two formats:
-- Relative path from the root of the working directory.
-- Relative path from the location of the current file.
+- Relative path from the current location.
+- Relative path from the location of the target file or instruction.
 
-## 3. Instruction Discovery
-**Step 3.1:** If your task involves searching for or recognizing instructions, use strictly the following folder patterns for the search (where `<keyword>` is `ai_instrs`):
+### 3. Instruction Discovery
+**Step 3.1:** If your task includes searching for or recognizing instructions, use strictly the following folder patterns for the search (where `<keyword>` is `ai_instrs`):
 - `ai_instrs/`
 - `*.<keyword>/` (for example: `name.ai_instrs/`)
 - `<keyword>.*/` (for example: `ai_instrs.name/`)
 *All files inside discovered folders are considered instructions.*
 
-**Step 3.2:** Use strictly the following patterns for searching single instruction files:
+**Step 3.2:** For each discovered instruction folder, check for the presence of a `_.md` file. If present, treat it as the parent instruction inheriting the folder name, and the remaining files as its sub-instructions. If absent, preserve the same hierarchy implicitly: treat the folder name as the parent level and the remaining files as sub-instructions.
+
+**Step 3.3:** Use strictly the following patterns for searching single instruction files:
 - `ai_instrs.<extension>`
 - `*.ai_instrs.<extension>`
 
-## 4. Saving Artifacts
-**Step 4.1:** If you generate files, scripts, reports, or other artifacts, and the context of the task does not specify a specific location to save them, you must save them in the `./ai_artifacts/` directory.
-**Step 4.2:** The `./ai_artifacts/` path should be constructed relative to the instruction file (highest priority) or relative to the root of the working directory (if the instruction is not bound to a specific path).
+### 4. Saving Artifacts
+**Step 4.1:** If you generate files, scripts, reports, or other side artifacts, and no specific location is specified in the task context for saving them, you are required to save them in the `./ai_artifacts/` directory.
+**Step 4.2:** This path must be constructed relative to the instruction file (highest priority) or relative to the current execution directory.

@@ -1,9 +1,9 @@
 ---
 name: "impl-instrs-reverse-engineer-instr"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Translate an existing implementation or artifacts back into strict AI instructions."
+description: ""
 ---
 
-# Skill: Reverse Engineering Instructions
+**Related rules:** /impl-instrs-instruction-style, /impl-instrs-workspace.
 
 This skill translates an existing result (completed code, architecture, artifacts) back into the format of strict text instructions for AI agents. Your main task is to create a base of rules and algorithms, relying on which the agent will be able to independently recreate the current result from scratch.
 
@@ -23,8 +23,8 @@ This skill translates an existing result (completed code, architecture, artifact
 
 **Step 3. Designing the structure of instruction files**
 1. Plan the structure for saving the rules (usually in the `ai_instrs/` folder of the project).
-2. Design `main.md` as a central entry point that consolidates the context.
-3. Distribute highly specialized rules into separate files and link them from `main.md`.
+2. If `_.md` is present, use it as a parent instruction with the folder name, and the other files as sub-instructions.
+3. If `_.md` is absent, preserve the hierarchy implicitly: the folder name is the parent level, and the other files are sub-instructions.
 
 **Step 4. Physical creation of instructions**
 1. Use `write_to_file` to create all planned Markdown files.

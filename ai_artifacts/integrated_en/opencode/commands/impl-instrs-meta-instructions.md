@@ -1,9 +1,9 @@
 ---
 name: "impl-instrs-meta-instructions"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Write meta-instructions that define guidelines and formats for other instructions. Trigger on files matching: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
 ---
 
-# Meta-instructions
+**Related rules:** /impl-instrs-instruction-style, /impl-instrs-workspace.
 
 **Core:** The ability to write instructions at any level, including instructions for instructions.
 
@@ -13,7 +13,7 @@ Upon receiving a task to create or modify a meta-instruction, strictly execute t
 
 ### Step 1. Analysis of Current Base
 1. Discover and read existing rules using the `ai_instrs` file and directory patterns.
-2. Determine to which abstraction level the task belongs (e.g., core agent behavior, prompt authoring rules, directory structure).
+2. Determine to which abstraction level the task belongs (e.g., base agent behavior, prompt writing rules, directory structure).
 3. Check the concept for absence of overlaps with already existing instructions. Strictly adhere to the principle of isolated areas of responsibility.
 
 ### Step 2. Translation of Concepts into Algorithms

@@ -1,7 +1,9 @@
 ---
 name: "impl-instrs-instr-execution"
-description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
+description: "CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
 ---
+
+**Related rules:** /impl-instrs-instruction-style, /impl-instrs-workspace.
 
 When this skill is explicitly invoked, execute the instruction specified by the operator only after proactively gathering context.
 
@@ -15,7 +17,7 @@ Identify root reference files related to terms, concepts, and the structure of i
 
 Read these files before moving on to the local task files.
 
-Do not skip this step under the pretext of imagined simplicity.
+Do not ignore this step under the pretext of imagined task simplicity.
 
 ### Step 3: Find Adjacent Context
 Thoughtfully analyze directory names, file names, and links inside the instructions you have read.

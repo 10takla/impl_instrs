@@ -1,8 +1,10 @@
 ---
 name: "impl-instrs:simultaneous-update-instrs-result"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Simultaneous update of instructions and the result. CRITICAL BLOCKER: YOU MUST read this before ANY interaction (even for simple typo fixes) with files and folders matching the patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. The file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
+description: "CRITICAL BLOCK: You MUST read this before ANY interaction (even simple typo fixes) with files and folders matching patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default baseline knowledge. You will fail the task if you ignore this."
 ---
 
-Execute `[impl-instrs:instrs-write](slashCommand;impl-instrs:instrs-write)` to formulate or update the applicable instruction.
+**Related rules:** [impl-instrs-instruction-style.md](*rule;file:///C:/Users/root/.gemini/config/plugins/impl_instrs/rules/impl-instrs-instruction-style.md*), [impl-instrs-workspace.md](*rule;file:///C:/Users/root/.gemini/config/plugins/impl_instrs/rules/impl-instrs-workspace.md*).
 
-Then execute `[impl-instrs:instr-execution](slashCommand;impl-instrs:instr-execution)` to carry out the current instruction.
+Execute `[impl-instrs:instrs-write](slashCommand;impl-instrs:instrs-write)` to generate or update the applicable instruction.
+
+Then execute `[impl-instrs:instr-execution](slashCommand;impl-instrs:instr-execution)` to execute the up-to-date instruction.

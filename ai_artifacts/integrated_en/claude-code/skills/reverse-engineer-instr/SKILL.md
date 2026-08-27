@@ -1,37 +1,37 @@
 ---
 name: "reverse-engineer-instr"
-description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Translate an existing implementation or artifacts back into strict AI instructions."
+description: ""
 disable-model-invocation: true
 ---
 
-# Skill: Reverse Engineering Instructions
+**Related rules:** /impl-instrs:instruction-style, /impl-instrs:workspace.
 
-This skill translates an existing result (completed code, architecture, artifacts) back into the format of strict text instructions for AI agents. Your main task is to create a base of rules and algorithms, relying on which the agent will be able to independently recreate the current result from scratch.
+This skill reverse-engineers an existing result (completed code, architecture, artifacts) back into the format of strict textual instructions for AI agents. Your primary objective is to create a foundation of rules and algorithms that enables an agent to independently recreate the current result from scratch.
 
-## Strict Imperative Workflow Algorithm
+## Strict Imperative Execution Algorithm
 
-**Step 1. Study the target object (result)**
-1. Request from the operator (if not specified initially) absolute paths to files or directories whose implementation needs to be translated into instructions.
-2. Use `list_dir` to review the structure and `view_file` to study the source code and artifacts in detail.
-3. Analyze how the implementation functions, what patterns are used, and what the architectural and business requirements are.
+**Step 1. Study Target Object (Result)**
+1. Request from the operator (if not provided initially) absolute paths to the files or directories whose implementation needs to be translated into instructions.
+2. Use `list_dir` to inspect the structure and `view_file` to thoroughly study the source code and artifacts.
+3. Analyze how the implementation operates, which patterns are used, the architecture, and business requirements.
 
-**Step 2. Translation of concepts into mechanical steps**
-1. Decompose the studied implementation into logical blocks (for example: "File structure", "Architectural decisions", "Business logic", "Formatting rules").
-2. For each block, formulate specific, step-by-step instructions for the LLM.
-   - **IT IS FORBIDDEN** to describe the current state using abstract concepts (for example: "the agent understands the structure").
-   - **IT IS MANDATORY** to translate abstractions into a shared knowledge base and actions, formulate rules in the imperative mood (for example: "Step 1: do `list_dir` of directory X", "Use pattern Y").
-3. The final instructions must represent a strict algorithm that eliminates ambiguity.
+**Step 2. Translate Concepts into Mechanical Steps**
+1. Decompose the studied implementation into logical blocks (e.g., "File Structure", "Architectural Decisions", "Business Logic", "Styling Rules").
+2. For each block, formulate concrete, step-by-step instructions for the LLM.
+   - **DO NOT** describe the current state using abstract concepts (e.g., "agent understands the structure").
+   - **MANDATORY**: Translate abstractions into an actionable knowledge base and actions; formulate rules in the imperative mood (e.g., "Step 1: Execute `list_dir` on directory X", "Use pattern Y").
+3. Final instructions must represent a strict algorithm that eliminates ambiguity.
 
-**Step 3. Designing the structure of instruction files**
-1. Plan the structure for saving the rules (usually in the `ai_instrs/` folder of the project).
-2. Design `main.md` as a central entry point that consolidates the context.
-3. Distribute highly specialized rules into separate files and link them from `main.md`.
+**Step 3. Design Instruction File Structure**
+1. Plan the rule storage structure (typically in the project's `ai_instrs/` directory).
+2. If `_.md` exists, use it as the parent instruction taking the directory name, and other files as its sub-instructions.
+3. If `_.md` is absent, preserve the hierarchy implicitly: the directory name is the parent level, and other files are sub-instructions.
 
-**Step 4. Physical creation of instructions**
+**Step 4. Physical Creation of Instructions**
 1. Use `write_to_file` to create all planned Markdown files.
-2. **MANDATORY**: when forming links between instruction files, strictly follow the syntax: paths in links `[]()` must be wrapped in angle brackets `(<path>)` (example: `[Module](<./module.md>)`).
+2. **MANDATORY**: When creating links between instruction files, strictly adhere to the syntax: paths in `[]()` links must be enclosed in angle brackets `(<path>)` (example: `[Module](<./module.md>)`).
 
-**Step 5. Completion and reporting**
-1. Stop calling editing tools after all files have been saved.
-2. Generate a brief and clear report for the operator with a list of all created files (as clickable links).
-3. Specify the main concepts that were successfully translated into the format of AI instructions. Await further commands.
+**Step 5. Completion and Reporting**
+1. Stop calling editing tools once all files are saved.
+2. Form a concise and clear report for the operator with a list of all created files (as clickable links).
+3. Specify the core concepts successfully translated into AI instruction format. Await further commands.

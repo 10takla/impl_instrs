@@ -1,8 +1,8 @@
 ---
 name: "language-formats"
-description: "Markdown formatting rule for file paths to preserve spaces"
+description: "Path formatting rule in Markdown files to preserve spaces"
 ---
 
 ## Language Formats: Markdown
 
-- File paths in links `[]()` must be specified only in angle brackets `(<path>)` to preserve spaces.
+- File paths in `[]()` links must be enclosed strictly in angle brackets `(<path>)` to preserve spaces.
