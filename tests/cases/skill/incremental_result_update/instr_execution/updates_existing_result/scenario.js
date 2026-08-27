@@ -5,10 +5,8 @@ module.exports = async ({ workspaceDir, run, continueRun, checkpoint }) => {
   const prompt = [
     '/impl-instrs:instr-execution',
     '',
-    'Выполни актуальную инструкцию из requirements.ai_instrs.md.',
-    ''
+    'Выполни актуальную инструкцию из `requirements.ai_instrs.md`.'
   ].join('\n');
-
 
   const session = await run(prompt);
 
@@ -17,9 +15,10 @@ module.exports = async ({ workspaceDir, run, continueRun, checkpoint }) => {
   fs.writeFileSync(
     path.join(workspaceDir, 'requirements.ai_instrs.md'),
     [
-      'В файле result.txt замени FIRST_STATE на CURRENT_STATE.',
+      'В `result.txt` замени `FIRST_STATE` на `CURRENT_STATE`.',
       '',
-      'Сохрани строку KEEP без изменений. Не изменяй другие файлы и не создавай новые.',
+      'Добавь `ADDED_STATE`, удали `LEGACY_STATE` и сохрани `KEEP`.',
+      'Не изменяй другие файлы и не создавай новые.',
       ''
     ].join('\n'),
     'utf8'

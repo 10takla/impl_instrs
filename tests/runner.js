@@ -71,6 +71,57 @@ function printTool(toolName, detail) {
   console.log('• [Tool] ' + toolName + (detail ? ' -> "' + detail + '"' : ''));
 }
 
+function createVerdictReader() {
+  const input = readline.createInterface({ input: process.stdin, terminal: false });
+  let closed = false;
+  input.once('close', function () {
+    closed = true;
+  });
+
+  return {
+    wait: function (label) {
+      return new Promise(function (resolve, reject) {
+        if (closed) {
+          reject(new Error('Контрольная точка "' + label + '" не получила вердикт: stdin закрыт.'));
+          return;
+        }
+
+        const cleanup = function () {
+          input.removeListener('line', onLine);
+          input.removeListener('close', onClose);
+        };
+        const onClose = function () {
+          cleanup();
+          reject(new Error('Контрольная точка "' + label + '" не получила вердикт: stdin закрыт.'));
+        };
+        const onLine = function (line) {
+          const verdict = line.trim();
+          if (verdict === 'CONTINUE') {
+            cleanup();
+            resolve();
+            return;
+          }
+
+          const failure = /^FAIL\s+(.+)$/.exec(verdict);
+          if (failure) {
+            cleanup();
+            reject(new Error('Контрольная точка "' + label + '": ' + failure[1]));
+            return;
+          }
+
+          console.log('[runner] Введи CONTINUE или FAIL <причина>.');
+        };
+
+        input.on('line', onLine);
+        input.once('close', onClose);
+      });
+    },
+    close: function () {
+      input.close();
+    }
+  };
+}
+
 async function parseAgyStream(stream) {
   const lines = readline.createInterface({ input: stream, terminal: false });
   const result = { sessionId: null, response: '', error: null };
@@ -295,6 +346,7 @@ async function main() {
   if (!fs.existsSync(scenarioPath)) throw new Error('Не найден сценарий: ' + scenarioPath);
 
   prepareWorkspace(testDir, outputDir);
+  let verdictReader = null;
   const scenario = require(scenarioPath);
   if (typeof scenario !== 'function') {
     throw new Error('scenario.js должен экспортировать асинхронную функцию.');
@@ -347,9 +399,20 @@ async function main() {
       },
       continueRun: function (session, prompt) {
         return invoke('continue', session, prompt);
+      },
+      checkpoint: async function (label) {
+        if (typeof label !== 'string' || !label.trim()) {
+          throw new Error('Метка контрольной точки не должна быть пустой.');
+        }
+
+        console.log('\n=== CHECKPOINT: ' + label.trim() + ' ===');
+        console.log('=== AWAITING VERDICT: CONTINUE | FAIL <причина> ===');
+        verdictReader = verdictReader || createVerdictReader();
+        await verdictReader.wait(label.trim());
       }
     });
   } finally {
+    if (verdictReader) verdictReader.close();
     process.chdir(originalCwd);
   }
 
