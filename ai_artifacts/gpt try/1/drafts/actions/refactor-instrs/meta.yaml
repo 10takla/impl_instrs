@@ -1,0 +1,10 @@
+description: "Реорганизует существующие инструкции с полным сохранением семантики и изоляцией конфликтующих контекстов."
+conditions:
+  - explicit_invocation
+  - reacts_to_instruction_files
+globs:
+  - "**/ai_instrs/**"
+  - "**/*.ai_instrs/**"
+  - "**/ai_instrs.*/**"
+  - "**/ai_instrs.*"
+  - "**/*.ai_instrs.*"

@@ -1,0 +1,10 @@
+description: "Формирует и редактирует формальные инструкции из требований оператора, не выполняя описанные в них задачи."
+conditions:
+  - explicit_invocation
+  - reacts_to_instruction_files
+globs:
+  - "**/ai_instrs/**"
+  - "**/*.ai_instrs/**"
+  - "**/ai_instrs.*/**"
+  - "**/ai_instrs.*"
+  - "**/*.ai_instrs.*"

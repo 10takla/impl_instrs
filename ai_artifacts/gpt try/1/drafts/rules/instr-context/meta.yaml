@@ -1,0 +1,10 @@
+description: "Обеспечивает единое понимание системы инструкций и обязательный проактивный сбор релевантного контекста."
+conditions:
+  - implicit_invocation
+  - reacts_to_instruction_files
+globs:
+  - "**/ai_instrs/**"
+  - "**/*.ai_instrs/**"
+  - "**/ai_instrs.*/**"
+  - "**/ai_instrs.*"
+  - "**/*.ai_instrs.*"

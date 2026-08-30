@@ -1,0 +1,10 @@
+description: "Последовательно обновляет текст инструкции и отражаемый ею результат."
+conditions:
+  - explicit_invocation
+  - reacts_to_instruction_files
+globs:
+  - "**/ai_instrs/**"
+  - "**/*.ai_instrs/**"
+  - "**/ai_instrs.*/**"
+  - "**/ai_instrs.*"
+  - "**/*.ai_instrs.*"

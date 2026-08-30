@@ -1,0 +1,10 @@
+description: "Задаёт стиль создания и редактирования инструкций."
+conditions:
+  - implicit_invocation
+  - reacts_to_instruction_files
+globs:
+  - "**/ai_instrs/**"
+  - "**/*.ai_instrs/**"
+  - "**/ai_instrs.*/**"
+  - "**/ai_instrs.*"
+  - "**/*.ai_instrs.*"

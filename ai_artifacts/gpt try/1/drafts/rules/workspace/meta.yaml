@@ -1,0 +1,10 @@
+description: "Определяет границы рабочего пространства, правила обнаружения инструкций, формирования путей и размещения побочных файлов."
+conditions:
+  - implicit_invocation
+  - reacts_to_instruction_files
+globs:
+  - "**/ai_instrs/**"
+  - "**/*.ai_instrs/**"
+  - "**/ai_instrs.*/**"
+  - "**/ai_instrs.*"
+  - "**/*.ai_instrs.*"

@@ -1,0 +1,10 @@
+description: "Восстанавливает исполнимые инструкции по существующему конечному результату, не изменяя и не улучшая его."
+conditions:
+  - explicit_invocation
+  - reacts_to_instruction_files
+globs:
+  - "**/ai_instrs/**"
+  - "**/*.ai_instrs/**"
+  - "**/ai_instrs.*/**"
+  - "**/ai_instrs.*"
+  - "**/*.ai_instrs.*"

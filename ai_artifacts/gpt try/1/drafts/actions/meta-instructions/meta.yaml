@@ -1,0 +1,10 @@
+description: "Создаёт и изменяет мета-инструкции — инструкции, определяющие правила для других инструкций."
+conditions:
+  - explicit_invocation
+  - reacts_to_instruction_files
+globs:
+  - "**/ai_instrs/**"
+  - "**/*.ai_instrs/**"
+  - "**/ai_instrs.*/**"
+  - "**/ai_instrs.*"
+  - "**/*.ai_instrs.*"

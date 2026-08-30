@@ -1,0 +1,5 @@
+name: impl-instrs
+version: 0.0.1
+description: "Пак для формирования, выполнения, сопровождения и диагностики инструкций ИИ-агентов."
+custom_conditions:
+  reacts_to_instruction_files: "Применяется к файлам и каталогам инструкций, обнаруживаемым по паттернам ai_instrs."

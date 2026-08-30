@@ -1,0 +1,10 @@
+description: "Исполняет явно указанную оператором область инструкции до требуемого результата, не изменяя текст самой инструкции."
+conditions:
+  - explicit_invocation
+  - reacts_to_instruction_files
+globs:
+  - "**/ai_instrs/**"
+  - "**/*.ai_instrs/**"
+  - "**/ai_instrs.*/**"
+  - "**/ai_instrs.*"
+  - "**/*.ai_instrs.*"
