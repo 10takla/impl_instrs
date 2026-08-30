@@ -3,45 +3,18 @@ name: "impl-instrs-instr-execution"
 description: "CRITICAL BLOCK: YOU MUST read this before ANY interaction (even a simple typo fix) with files and folders matching these patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default knowledge. You will fail the task if you ignore this."
 ---
 
-**Related rules:** /impl-instrs-instruction-style, /impl-instrs-workspace.
+**Related rules:**
+- /impl-instrs-instruction-style
+- /impl-instrs-workspace
 
-Upon explicit invocation of this skill, execute the instruction specified by the operator only after proactive context gathering.
+# Instruction Execution
 
-### Step 1: Examine the Root Structure
-Regardless of how specific the operator's request is, first obtain the structure of the root instruction directory.
+Execute the task described in the instruction and produce the required result. Do not substitute execution with modifying, improving, analyzing, or debugging the instruction text.
 
-Even if the operator specified an exact path, line, or section, this does not waive the requirement for primary exploration of the instruction structure.
+## Incremental Result Update
 
-### Step 2: Read Base Terminology
-Identify root reference files related to terms, concepts, and instruction structure.
-
-Read these files before proceeding to the local files of the task.
-
-Do not ignore this step under the pretext of apparent task simplicity.
-
-### Step 3: Find Related Context
-Meaningfully analyze directory and file names and links within the read instructions.
-
-Find related instructions that may influence the understanding of the target instruction.
-
-Use targeted reading. Avoid full scans unless required to understand the target instruction.
-
-### Step 4: Obtain the Current State of Requirements
-Immediately before execution, obtain the current state of the target instruction from its actual source. If the instruction is stored in a file, re-read the file or fragment specified by the operator from the file system.
-
-Treat the retrieved requirement state as the source of truth. Do not execute the instruction from a copy cached in context.
-
-### Step 5: Obtain the Existing State of the Result
-If a result from prior execution exists, obtain its current state from the actual source.
-
-Do not use a result copy cached in context instead of checking its current state.
-
-### Step 6: Form the New State of the Result
-Compare the current requirement state with the existing result state. Apply necessary additions, changes, and removals, preserving untouched parts.
-
-If the operator requested an independent new result, create it without modifying the previous result.
-
-All actions must rely on the gathered context, terminology, and applicable constraints.
-
-### Critical Rule
-Do not skimp on context. The agent has no authority to skip reading global terminology and root files before executing an instruction.
+1. Immediately before execution, retrieve the current state of the requirements from the original source.
+2. Retrieve the current state of the existing result, if one exists.
+3. Compare the current requirements against the existing result and determine the necessary additions, modifications, and deletions.
+4. Form the new state of the result: apply only the necessary changes and preserve all other parts unchanged. If no result exists yet, create it from the current requirements.
+5. Continue execution until the required result is obtained.

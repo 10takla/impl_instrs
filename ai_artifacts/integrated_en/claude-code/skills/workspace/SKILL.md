@@ -4,33 +4,33 @@ description: "CRITICAL BLOCK: YOU MUST read this before ANY interaction (even a 
 user-invocable: false
 ---
 
-**Related rules:** /impl-instrs:instr-context.
+**Related rules:**
+- /impl-instrs:instr-context
 
-You MUST strictly comply with the workspace concept and path addressing rules during any file operations.
+# Workspace
 
-### 1. Workspace
-**Step 1.1:** Your workspace is the current execution directory (`./`). All project instructions and artifacts relevant to you reside strictly within this space.
-**Step 1.2:** Do not attempt to search for instructions outside the workspace, as they do not exist for you there.
+## Boundaries
 
-### 2. Path Formatting
-**Step 2.1:** When mentioning, generating, or outputting file and folder paths, it is STRICTLY PROHIBITED to use absolute paths.
-**Step 2.2:** Use exclusively one of two formats:
-- Relative path from the current location.
-- Relative path from the location of the target file or instruction.
+1. Treat the current execution directory as the workspace.
+2. Search for instructions and task-relevant artifacts only within the workspace.
+3. Do not search for instructions outside the workspace.
 
-### 3. Instruction Discovery
-**Step 3.1:** If your task includes searching for or recognizing instructions, strictly use the following folder patterns (where `<keyword>` is `ai_instrs`):
-- `ai_instrs/`
-- `*.<keyword>/` (e.g., `name.ai_instrs/`)
-- `<keyword>.*/` (e.g., `ai_instrs.name/`)
-*All files within discovered folders are considered instructions.*
+## Paths
 
-**Step 3.2:** For each discovered instruction folder, check for the presence of a `_.md` file. If it exists, treat it as the parent instruction inheriting the folder name, and the remaining files as its sub-instructions. If it does not exist, maintain the same hierarchy implicitly: treat the folder name as the parent level and the remaining files as sub-instructions.
+1. Specify and form only relative paths. Do not use absolute paths.
+2. Measure the path from the current location or from the location of the target file or instruction.
 
-**Step 3.3:** Strictly use the following patterns to search for standalone instruction files:
-- `ai_instrs.<extension>`
-- `*.ai_instrs.<extension>`
+## Instruction Discovery
 
-### 4. Artifact Storage
-**Step 4.1:** If you generate files, scripts, reports, or other secondary artifacts, and the task context does not specify an explicit storage location, you MUST save them to the `./ai_artifacts/` directory.
-**Step 4.2:** This path must be constructed relative to the instruction file (highest priority) or relative to the current execution directory.
+1. Recognize instruction groups only by the following directory patterns: ai_instrs/, *.ai_instrs/, ai_instrs.*/.
+2. Treat all files inside a recognized group as instructions.
+3. For each recognized group, check for the presence of _.md:
+   - if the file exists, treat it as the parent instruction inheriting the directory name, and treat the remaining files as its sub-instructions;
+   - if the file is absent, keep the directory name as an implicit parent level and treat the remaining files as sub-instructions.
+4. Recognize standalone instruction files only by the patterns ai_instrs.* and *.ai_instrs.*.
+
+## Artifacts
+
+1. Save the artifact to the location explicitly specified by the instruction.
+2. If no location is specified, save the artifact to ./ai_artifacts/ relative to the instruction file.
+3. If the instruction file does not establish a reference point, use the current execution directory.

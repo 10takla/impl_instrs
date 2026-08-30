@@ -3,33 +3,20 @@ name: "impl-instrs:meta-instructions"
 description: "CRITICAL BLOCK: YOU MUST read this before ANY interaction (even a simple typo fix) with files and folders matching these patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default knowledge. You will fail the task if you ignore this."
 ---
 
-**Related rules:** [impl-instrs:instruction-style](rule;impl-instrs:instruction-style), [impl-instrs:workspace](rule;impl-instrs:workspace).
+**Related rules:**
+- [impl-instrs:instruction-style](rule;impl-instrs:instruction-style)
+- [impl-instrs:workspace](rule;impl-instrs:workspace)
 
-**Core idea:** The capability to author instructions at any level, including instructions for instructions.
+# Meta-Instructions
 
-## Strict Imperative Workflow Algorithm
+Create and modify instructions at any level, including instructions that govern the formation and modification of other instructions.
 
-Upon receiving a task to create or modify a meta-instruction, strictly follow these steps in the specified order:
+## Algorithm
 
-### Step 1. Analysis of Existing Base
-1. Discover and read existing rules using `ai_instrs` file and folder patterns.
-2. Determine which level of abstraction the task belongs to (e.g., baseline agent behavior, prompt authoring rules, directory structure).
-3. Check the concept for lack of overlap with existing instructions. Strictly adhere to the principle of isolated areas of responsibility.
-
-### Step 2. Translating Concepts into Algorithms
-Direct transfer of abstract business requirements is prohibited. Translate every conceptual idea into an executable algorithm:
-1. Replace abstract intentions (e.g., "agent should analyze the situation") with concrete tool invocation steps (e.g., "Step 1: Use tool X. Step 2: Execute search Y").
-2. Formulate a unified, clear, and unambiguous set of rules for the target object.
-3. Describe activation triggers if the instruction must trigger automatically (in accordance with `trigger: model_decision` standards).
-
-### Step 3. Interconnections and Reuse
-1. If the new meta-instruction utilizes logic described in another instruction, use explicit links formatted as `[Name](<Path>)`.
-2. Never duplicate logic from related objects.
-
-### Step 4. Formatting and Validation
-1. Format the resulting document in Markdown with mandatory YAML frontmatter (if applicable).
-2. Ensure the resulting text contains no ambiguous interpretations and represents a strict technical pipeline.
-
-### Step 5. Application
-1. Form a file name strictly matching discovery patterns (e.g., `name.ai_instrs.md`).
-2. Save the file in the current directory using exclusively allowed relative paths.
+1. Determine the level of the target instruction and the object whose behavior it governs.
+2. Study related instructions at the same, higher, and lower levels. Establish the boundary of responsibility for the target instruction and exclude overlaps with their logic.
+3. Separate the requirements for the instruction text from the task described in it. Form the instruction without executing that task.
+4. Transform each requirement into an unambiguous executable directive at the level of the target instruction.
+5. For an instruction that governs other instructions, specify actions over their content, structure, connections, or verification. Do not substitute these actions with executing the tasks that the governed instructions describe.
+6. Reference a related instruction instead of repeating its rules.
+7. Verify that the result covers the specified level, maintains the established boundary of responsibility, and contains no requirements for unrelated levels.

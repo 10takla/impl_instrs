@@ -4,8 +4,11 @@ description: "CRITICAL BLOCK: YOU MUST read this before ANY interaction (even a 
 disable-model-invocation: true
 ---
 
-**Related rules:** /impl-instrs:instruction-style, /impl-instrs:workspace.
+**Related rules:**
+- /impl-instrs:instruction-style
+- /impl-instrs:workspace
 
-Execute /impl-instrs:instrs-write to formulate or update the applicable instruction.
+## Algorithm
 
-Then execute /impl-instrs:instr-execution to execute the updated instruction.
+1. Execute /impl-instrs:instrs-write to form or update the applicable instruction.
+2. After formation is complete, execute /impl-instrs:instr-execution to execute the current instruction.

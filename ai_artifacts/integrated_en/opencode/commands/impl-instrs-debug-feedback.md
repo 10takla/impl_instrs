@@ -3,40 +3,40 @@ name: "impl-instrs-debug-feedback"
 description: "CRITICAL BLOCK: YOU MUST read this before ANY interaction (even a simple typo fix) with files and folders matching these patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default knowledge. You will fail the task if you ignore this."
 ---
 
-**Related rules:** /impl-instrs-instruction-style, /impl-instrs-workspace.
+**Related rules:**
+- /impl-instrs-instruction-style
+- /impl-instrs-workspace
 
-This skill provides step-by-step reasoning for agent decisions, delivers feedback, and diagnoses errors (debugging) in the **execution** and **authoring** processes of instruction files.
+# Debug and Feedback
 
-## Execution Algorithm
+Explain the unsatisfactory result of instruction execution or formation and propose corrections to the instructions themselves.
 
-Upon explicit invocation by the operator, strictly execute the following steps in the specified order:
+## Algorithm
 
-### Step 1: Initialization and Context Gathering
-1. Analyze the operator request and determine the debugging subject: the *execution* process of existing instructions or the *authoring* (creation/update) process of instructions.
-2. Use `list_dir` to scan the current instruction directory (including the `ai_instrs/` folder and its contents).
-3. Read root rule and terminology files related to the subject of the request (using `view_file`) before accessing local files and drawing conclusions. This is a critical condition to prevent context loss.
+1. Determine whether the problem relates to executing an existing instruction or to forming its text.
+2. Collect available facts: the operator's request, applicable instructions, the obtained result, error messages, logs, and artifacts. Do not fill in missing data with assumptions.
+3. Reconstruct from available data the sequence of decisions that led to the result. Do not expose hidden internal reasoning; present only verifiable grounds and concise causal connections.
+4. If the problem occurred during instruction execution:
+   - compare the actual result against the instruction requirements;
+   - find formulations, omissions, ambiguities, or contradictions that directed execution toward the unwanted result;
+   - separate the instruction deficiency from an error not caused by its text.
+5. If the problem occurred during instruction formation:
+   - compare the source requirements against the produced instruction text;
+   - check target completeness, conciseness, abstraction level, imperativeness, and absence of semantic repetition;
+   - indicate which editorial decisions distorted, weakened, or supplemented the original requirements without justification.
+6. For each conclusion, provide a specific fact and a reference to a file or rule. If confirmation is unavailable, mark the conclusion as unconfirmed and do not present it as the cause of the error.
+7. Produce a report with the following sections:
+   - subject of analysis and expected result;
+   - confirmed facts;
+   - causes of the unsatisfactory result;
+   - proposals for correcting the instructions;
+   - missing data, if it prevents an accurate conclusion.
+8. For each proposal, indicate which cause it addresses. Provide a ready-made formulation, a Markdown fragment, or a diff block, but do not apply the proposed change.
 
-### Step 2: Running Verification Checks
+## Constraints
 
-**If Subject is Instruction Execution:**
-1. Read the target instruction file and the source code (or artifact) generated according to that instruction.
-2. Analyze your own internal reasoning (thinking log) during task execution. Your goal is to understand how the current instruction wording led the agent to the undesired result.
-3. Analyze the instruction files themselves to pinpoint where they were inaccurate, ambiguous, or erroneous (leading to flawed logic).
-4. Record all detected deficiencies in the instructions: missing important constraints, abstract concepts instead of strict steps, contradictions, or lack of context.
-
-**If Subject is Instruction Authoring:**
-1. Read the generated instruction text.
-2. Verify structure: check compliance with formatting rules, completeness, and conciseness.
-3. Check for abstract philosophical concepts instead of strict imperative steps. Record them as critical errors.
-4. Ensure there are no violations of core prompt-writing rules (redundant positive phrasing, improper abstraction level).
-
-### Step 3: Generating Error Report and Proposals
-1. Formulate a structured report for the operator.
-2. **Instruction Vulnerability Rationale:** Based on analysis of your reasoning, explain why the instructions led the agent to an erroneous result (e.g., "the instruction contains conflicting requirements", "the constraint was described too abstractly, allowing it to be ignored").
-3. Rely strictly on facts from the file system. Provide exact file references formatted as `[name](<relative/path/to/file.md>)`.
-4. **Instruction Remediation Proposals:** Provide concrete wording to fix problematic instructions (translating abstract rules into clear steps, adding new negative prompts, etc.). PROHIBITED from applying changes autonomously — only propose them to the operator as text snippets (code templates or diff blocks).
-
-## Strict Constraints
-- PROHIBITED from autonomously making any changes to project files or applying code fixes during debugging. Only reading, analysis, and generation of a text report with rationale and plan are permitted.
-- Prohibited from using generic statements or assuming system behavior without factual confirmation from logs or instruction files.
-- Any claim of a violation must be accompanied by a link to a specific rule described in official instructions (e.g., style rules, execution context, or workspace constraints).
+- Do not modify instructions, code, configuration, artifacts, or other project files.
+- Do not fix code and do not substitute instruction debugging with implementation debugging.
+- Do not assert that an instruction caused an error without a confirmed connection between its wording and the result.
+- Do not propose expanding the instruction's scope unless it is required to eliminate the identified cause.
+- Return the report to the operator. Save it to a file only upon the operator's direct instruction and only at the specified path.

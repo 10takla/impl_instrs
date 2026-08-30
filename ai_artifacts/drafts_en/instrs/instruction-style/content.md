@@ -1,29 +1,44 @@
-**Related rules:** @draft(instr-context).
+**Related rules:**
+- @draft(instr-context)
 
-When creating or editing any instruction files, you MUST execute the following algorithm line by line:
+# Instruction Style
 
-### STEP 1: Ensure "Target Completeness"
-1. Analyze input requirements.
-2. Eliminate any fabricated details added for the sake of apparent "objective completeness" or an idealized spec template.
-3. Keep ONLY those facts, meanings, and constraints that directly convey the vision of the task.
+Execute the following steps when creating or modifying an instruction.
 
-### STEP 2: Compress to "Conciseness"
-1. Rewrite all retained points as directly and concisely as possible.
-2. Remove filler words, introductory phrasing, and lengthy deliberations.
-3. Ensure that each semantic unit has exactly one unambiguous formulation. Not a single word should waste space.
+## 1. Ensure Target Completeness
 
-### STEP 3: Calibrate Abstraction Level
-For each rule being formed, verify its level of abstraction:
-1. **Check for over-specification:** Ensure the general rule is NOT described using terms of a specific example. If it is — generalize the wording.
-2. **Check for over-abstraction:** Ensure the rule is NOT detached from the real context of the instruction. If it became vague — make it concrete.
-*A rule must be generalized to exactly the level of the instruction itself.*
+1. Identify all goals, ideas, meanings, and intentions explicitly expressed in the source requirements.
+2. Transfer each identified thought into the instruction with the level of detail it requires.
+3. Do not add information for the sake of formal or comprehensive completeness.
 
-### STEP 4: Configure Framing (Positive / Negative Prompts)
-1. Assess the risk of a critical agent error during instruction execution.
-2. If the risk is high, add a strict negative prompt (prohibition) as an operational boundary.
-3. PROHIBITED from duplicating the same meaning in both positive and negative framing (this wastes tokens).
-4. If strict control is not required, use neutral notices instead of directive prompts.
+## 2. Ensure Conciseness
 
-### STEP 5: Use Imperative Style
-1. Formulate all directives in the imperative mood (e.g., "Execute...", "Write...", "Verify...").
-2. Avoid neutral or descriptive constructions like "You need to execute..." or "It is recommended to check...".
+1. Formulate each thought directly, precisely, and concisely.
+2. Remove filler words, convoluted phrasing, and lengthy reasoning.
+3. Express each thought in a single unambiguous formulation.
+4. Preserve all target completeness while reducing the text.
+
+## 3. Calibrate the Abstraction Level
+
+1. Match each rule to the abstraction level of the target instruction.
+2. Generalize the wording if the language of a specific case limits a broader rule.
+3. Concretize the wording if it is detached from the subject of the instruction or allows vague interpretation.
+
+## 4. Choose the Form of Directive
+
+1. Use a positive directive if it unambiguously defines the required action.
+2. Add a negative constraint if the positive directive is insufficient to prevent a critical error.
+3. Do not duplicate the same meaning in both positive and negative directives simultaneously.
+4. Use a neutral notice or omit the directive if guiding the agent's behavior is not required.
+
+## 5. Use Imperative Style
+
+1. Formulate directives in the imperative mood: "Execute", "Write", "Verify".
+2. Replace descriptive constructions such as "needs to be done" and "it is recommended to check" with direct commands.
+
+## 6. Verify the Result
+
+1. Verify that the instruction conveys all original thoughts without invented details.
+2. Verify that every word carries meaning and every thought is formulated unambiguously.
+3. Verify that the abstraction level of each rule matches the level of the instruction.
+4. Verify that all directives are imperative and that positive and negative formulations do not duplicate each other.

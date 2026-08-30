@@ -3,53 +3,48 @@ name: "impl-instrs-instrs-write"
 description: "CRITICAL BLOCK: YOU MUST read this before ANY interaction (even a simple typo fix) with files and folders matching these patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default knowledge. You will fail the task if you ignore this."
 ---
 
-**Related rules:** /impl-instrs-instruction-style, /impl-instrs-workspace.
+**Related rules:**
+- /impl-instrs-instruction-style
+- /impl-instrs-workspace
 
-You are in instruction authoring mode. Your task is to transform the operator's business requirements into formalized instructions (prompts), strictly following the imperative algorithm below.
+# Instruction Formation
 
-## Boundary Between Authoring and Execution
-Instruction authoring is working with the text of instructions.
+Form new instructions from the operator's requirements or update existing instructions according to those requirements.
 
-Formulate, refine, or modify the instruction, but do not execute the task that the instruction describes.
+## Formation and Execution Boundary
 
-If the operator's requirement pertains to future output of the agent, transfer this requirement into the text of the instruction.
+1. Work only with the instruction text: formulate, clarify, or modify it.
+2. Do not execute the task described by the instruction being formed.
+3. Transfer requirements for the agent's future result into the instruction text.
 
-## 1. Design and Context Isolation Phase
-**Input:** Operator request to create or update an instruction.
+## Context Isolation
 
-1. **Analyze the task** for conflicting contexts. (For example, detailed description of a deep analysis algorithm and a database schema at the same time are two distinct contexts that will interfere with each other).
-2. **IF** the task contains heterogeneous and complex steps, **THEN**:
-   - Split the task into multiple independent instructions.
-   - Design each instruction so that it addresses only one focused step to prevent context pollution.
-   - Inform the operator: "The task is split into instructions A and B. I recommend executing instruction A in an isolated context before proceeding to B."
-3. **ELSE**: Proceed to the next phase.
+1. Identify the detailed stages of the task and assess whether information about one stage interferes with focus on another.
+2. Split the task only when there is a context conflict; do not fragment it mechanically into separate instructions.
+3. When a context conflict exists, form a separate instruction for each stage containing only the information relevant to that stage.
+4. Record the isolated execution sequence via [!AI-INFO]: complete the first instruction in full before passing the next one to the agent.
 
-## 2. Incremental Update Phase (When Editing)
-**Input:** Instruction requirements and existing instruction.
+## Incremental Update
 
-1. **Obtain the current state of requirements and existing state of the instruction** from their sources immediately before editing. If state is stored in a file, re-read that file.
-2. **Compare current requirements with the existing instruction** and determine necessary additions, changes, and removals.
-3. **Generate the new instruction state**, applying only the necessary delta and preserving untouched parts.
+1. Immediately before making changes, retrieve the current requirements and the current state of the instruction from their original sources; re-read the instruction file if it is stored in the file system.
+2. Compare the current requirements against the current instruction and determine the necessary additions, modifications, and deletions.
+3. Apply only the necessary delta and preserve all unaffected requirements and formulations.
+4. If no existing instruction is present, form a new instruction from the current requirements.
 
-## 3. Two-Way Meta-Communication Phase (Markers)
-When generating instruction content, use a strict system of placeholders (markers) for meta-communication. **CRITICAL:** All communication, clarification requests, or status transmissions must occur via these markers directly inside instruction files, not in free-form dialogue.
+## Placeholders and Feedback
 
-1. **Handling Operator Delegation:**
-   - Find all markers of the form `{{...}}` in the text.
-   - Treat the entire content of the placeholder as a direct directive to the agent for authoring the instruction.
-   - Expand the placeholder strictly within the logic of instruction text formation, seamlessly blending the result into the surrounding context.
-2. **Operator Feedback:**
-   - If you lack context to accurately form the instruction, or discover risks, insert a `[!...]` marker in the text.
-   - Use tags matching the task: `[!AI-QUESTION]`, `[!AI-WARNING]`, `[!AI-INFO]`.
-   - Wrap the marker in a native comment for the target file language. Examples:
-     - Markdown / Text: `[!AI-QUESTION] Why was this specific approach chosen?`
-     - JS / TS / C-style: `// [!AI-WARNING] Risk of security violation.`
-     - Python / Bash: `# [!AI-INFO] Instruction adapted.`
-     - HTML: `<!-- [!AI-QUESTION] Clarify class name? -->`
+1. Find all markers in the instruction being formed.
+2. Treat all content inside each marker as a directive addressed to you for forming the instruction text, regardless of how it is phrased.
+3. Resolve the directive only within the logic of instruction formation, embed the result into its text, and remove the processed marker.
+4. Convey questions, warnings, explanations, and formation status only through [!...] markers inside the target file; do not surface them in free dialogue.
+5. Place [!...] directly in Markdown and text files; in files of other formats, wrap it in a native comment of the target language.
+6. Select the tag by purpose: [!AI-QUESTION] when context is lacking, [!AI-WARNING] when a risk is detected, or [!AI-INFO] for a reference note.
+7. Use markers only for meta-information about the logic or text of the instruction being formed. Do not use them to execute the described task or for unrelated dialogue.
 
-## 4. Storage and File System Phase
-1. **Write the result** into the current directory.
-2. **Check naming:** Ensure the created file or folder name matches instruction discovery patterns:
-   - Folders: `ai_instrs/`, `*.ai_instrs/`, `ai_instrs.*/`
-   - Files: `ai_instrs.*`, `*.ai_instrs.*`
-3. **Handling side files:** Any generated artifacts, scripts, reports, or other files without an explicitly specified storage location in the instruction must be saved **strictly** in the `ai_artifacts/` directory (path is relative to the instruction file or current location).
+## Result Verification
+
+1. Verify that the result contains an instruction and not the result of executing it.
+2. Verify that separated instructions do not mix conflicting contexts.
+3. When updating, compare the result against the current requirements and the original state of the instruction.
+4. Verify that all processed markers are resolved and each [!...] relates only to instruction formation.
+5. Commit the result to the file system in the format established for the target instruction system.

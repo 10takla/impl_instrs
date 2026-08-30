@@ -1,0 +1,4 @@
+description: "Path formatting rule in Markdown files to preserve spaces"
+conditions:
+  - implicit_invocation
+globs: "**/*.md"

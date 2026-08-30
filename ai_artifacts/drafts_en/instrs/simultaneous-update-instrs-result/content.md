@@ -1,5 +1,8 @@
-**Related rules:** @draft(instruction-style), @draft(workspace).
+**Related rules:**
+- @draft(instruction-style)
+- @draft(workspace)
 
-Execute @draft(instrs-write) to formulate or update the applicable instruction.
+## Algorithm
 
-Then execute @draft(instr-execution) to execute the updated instruction.
+1. Execute @draft(instrs-write) to form or update the applicable instruction.
+2. After formation is complete, execute @draft(instr-execution) to execute the current instruction.

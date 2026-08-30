@@ -1,27 +1,33 @@
-Treat each instruction as part of a unified instruction system, not as a one-off isolated prompt.
+# Instruction Context
 
-An instruction is a structural element of a pack, formatted as a file and included in a connected instruction system.
+## Conceptual Layer
 
-Instructions may reside in different groups of files and directories. Connections between them can be established via links, shared terminology, context, related semantic domains, or the relationship of a general rule to a local refinement. Placing instructions in different root groups does not break the shared context.
+- Treat the pack as a set of system prompts, and a skill as a logically structured block of the pack formatted according to strict rules.
+- Treat the operator as the agent's user, and the agent as the AI executor of the operator's instructions.
+- Treat the project as a combination of file structure and agent work results, the working directory as the current task execution directory, and an agent artifact as a reflection of instruction execution results in the file system.
+- Treat a prompt and instruction as a directive to the agent for execution, a functional instruction as a transformation of input context into a result, and a meta-instruction as an instruction for instructions.
+- Treat the instruction hierarchy as movement from general rules to more specific ones that refine them, and graph navigation as traversal of a network of Markdown links between instructions.
+- Treat a positive prompt as a directive of desired actions, a negative prompt as a restriction, target completeness as transferring only a subjective vision without artificial details, and conciseness as direct and precise wording without unnecessary words.
+- Treat instruction formation as their creation or modification, instruction execution as execution to a final result, and a decision as the result of formation or execution.
+- Treat reverse engineering of instructions as translating a result back into instructions, and instruction refactoring as their rework while preserving semantics to improve the result.
 
-Instructions form a single project context and serve as a strict source of truth. Any agent actions when working with instructions must rely on this context and comply with the goals, constraints, and terms specified in the applicable instructions.
+## Unified Instruction System
 
-Use the pack's core terms in their project-specific definitions:
-- **Pack** — a set of system prompts.
-- **Operator** — the agent's user.
-- **Agent** — the AI executor of operator instructions.
-- **Project** — the combination of file structure and agent output results.
-- **Agent artifact** — a reflection of the instruction execution result in the file system.
-- **Instruction / Prompt** — a directive for the agent to execute.
-- **Meta-instruction** — an instruction for instructions.
-- **Graph navigation** — traversing markdown instructions via a network of hyperlinks.
+- Treat each instruction as a structural element of the pack, formatted as a file and included in a connected instruction system, not as a one-off isolated prompt.
+- Maintain a shared instruction context regardless of how instructions are distributed across directories and root groups.
+- Account for hierarchical, adjacent, and reference connections established by links, shared terminology, or context.
+- Treat applicable instructions as the strict source of truth. Align actions with the goals, constraints, and terms they define.
 
-### Proactive Context Gathering
+## Proactive Context Gathering
 
-Before executing a task, you MUST proactively gather context. Relying on the instruction file structure, meaningfully analyze the names of instruction directories and files to assess their relevance. Find useful information in related instructions and base reference documents, making deliberate decisions on whether to read them. This allows navigation without explicit links and avoids full-sweep scanning, preventing context pollution.
+1. Before navigating to the file or fragment specified by the operator, explore the instruction file structure using an available tool such as list_dir and retrieve the structure of the root instruction directory.
+2. Perform this step even when an exact path or line is specified and regardless of the apparent simplicity of the task.
+3. Analyze directory and file names to identify potentially relevant base references and adjacent instructions.
+4. Read terminology, concept, and structure references before reading local task instructions.
+5. Find related instructions through links, shared terminology, context, and relationship types. Read only the materials needed to understand the task; do not scan instructions in a full sweep without necessity.
+6. Execute the task only after collecting the applicable context.
 
-1. **Mandatory structure exploration:** Even if the operator provided an exact path to a file or specific line, you must first use file system exploration tools (e.g., `list_dir`) to retrieve the instruction structure (e.g., `ai_instrs/`).
-2. **Reading base terminology:** Identify and read reference files (primarily those related to terms, concepts, and structure) before moving on to local files specified in the task.
-3. **No skimping on context:** The apparent simplicity of a task cannot serve as justification for skipping the reading of terminology and base reference guides. You have no authority to ignore them.
+## Scope Boundary
 
-Do not use this rule as an algorithm for execution, writing files, refactoring, or synchronizing results. Operational procedures are defined by separate drafts.
+- Use this instruction only as a common conceptual layer and algorithm for proactive context gathering.
+- Do not substitute it for operational procedures for forming, executing, updating, refactoring, or debugging instructions.
