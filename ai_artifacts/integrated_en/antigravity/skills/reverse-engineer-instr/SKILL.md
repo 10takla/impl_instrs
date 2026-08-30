@@ -3,7 +3,7 @@ name: "impl-instrs:reverse-engineer-instr"
 description: ""
 ---
 
-**Related rules:** [impl-instrs-instruction-style.md](*rule;file:///C:/Users/root/.gemini/config/plugins/impl_instrs/rules/impl-instrs-instruction-style.md*), [impl-instrs-workspace.md](*rule;file:///C:/Users/root/.gemini/config/plugins/impl_instrs/rules/impl-instrs-workspace.md*).
+**Related rules:** [impl-instrs:instruction-style](rule;impl-instrs:instruction-style), [impl-instrs:workspace](rule;impl-instrs:workspace).
 
 This skill translates an existing result (finished code, architecture, artifacts) back into strict textual instructions for AI agents. Your primary task is to create a foundation of rules and algorithms that allows an agent to independently recreate the current result from scratch.
 

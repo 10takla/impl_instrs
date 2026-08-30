@@ -1,5 +1,5 @@
 ---
-description: "Path formatting rule in Markdown files to preserve spaces"
+name: "impl-instrs-language-formats"
 trigger: "glob"
 globs: "**/*.md"
 ---

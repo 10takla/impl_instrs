@@ -4,7 +4,7 @@ description: "CRITICAL BLOCK: YOU MUST read this before ANY interaction (even a 
 trigger: "model_decision"
 ---
 
-**Related rules:** [impl-instrs-instr-context.md](*rule;file:///C:/Users/root/.gemini/config/plugins/impl-instrs/rules/impl-instrs-instr-context.md*).
+**Related rules:** [impl-instrs:instr-context](rule;impl-instrs:instr-context).
 
 When creating or editing any instruction files, you MUST execute the following algorithm line by line:
 

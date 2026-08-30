@@ -1,6 +1,7 @@
 ---
 name: "language-formats"
-description: "Path formatting rule in Markdown files to preserve spaces"
+description: "Path formatting rule in Markdown files to preserve spaces globs: **/*.md."
+user-invocable: false
 ---
 
 ## Language Formats: Markdown

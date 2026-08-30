@@ -1,6 +1,6 @@
 ---
 name: "impl-instrs-language-formats"
-description: "Path formatting rule in Markdown files to preserve spaces"
+description: "Path formatting rule in Markdown files to preserve spaces globs: **/*.md."
 ---
 
 ## Language Formats: Markdown

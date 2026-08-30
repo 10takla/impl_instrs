@@ -1,6 +1,7 @@
 ---
 name: "short-answer"
 description: "DO NOT TRIGGER AUTOMATICALLY. Workflow for explicit invocation only via /slash command. Add a short concise summary at the end of detailed responses."
+disable-model-invocation: true
 ---
 
 When generating a detailed response, add a short concise summary at the very end of the message.
