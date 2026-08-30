@@ -1,4 +1,6 @@
 name: impl-instrs
-version: 1.0.1
+version: 1.0.2
 description: "Modular instruction and rule system for AI agents"
 author: "10takla"
+custom_conditions:
+  reacts_to_instruction_files: "CRITICAL BLOCK: YOU MUST read this before ANY interaction (even a simple typo fix) with files and folders matching these patterns: 'ai_instrs/', '*.ai_instrs/', 'ai_instrs.*/', 'ai_instrs.*', '*.ai_instrs.*'. This file contains non-standard rules that override your default knowledge. You will fail the task if you ignore this."

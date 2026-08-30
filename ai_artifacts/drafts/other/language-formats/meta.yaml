@@ -1,3 +1,4 @@
 description: "Правило форматирования путей в Markdown-файлах для сохранения пробелов"
-trigger: glob
+conditions:
+  - implicit_invocation
 globs: "**/*.md"
