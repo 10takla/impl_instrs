@@ -3,7 +3,7 @@
   "tasks": [
     {
       "label": "Integrate Drafts (Watch)",
-      "type": "shell",
+      "type": "process",
       "command": "node",
       "args": [
         "${workspaceFolder}/../ai_drafts/ai_artifacts/integrate.js",
@@ -11,6 +11,9 @@
         "${workspaceFolder}/ai_artifacts/integrated_en",
         "--watch"
       ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "isBackground": true,
       "problemMatcher": {
         "pattern": {
