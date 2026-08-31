@@ -1,5 +1,5 @@
 name: impl-instrs
-version: 1.0.2
+version: 1.0.3
 description: "Система модульных инструкций и правил для AI-агентов"
 author: "10takla"
 custom_conditions:
