@@ -1,15 +1,8 @@
 ---
-name: antigravity-cli
-description: "Operate the Antigravity CLI (agy): plugins, auth, sandbox, stream-json orchestration."
-version: 0.4.0-patched
-author: Tony Simons (asimons81), Hermes Agent, Patched for Orchestration
-license: MIT
-platforms: [linux, macos, windows]
-metadata:
-  hermes:
-    tags: [Coding-Agent, Antigravity, CLI, Auth, Plugins, Sandbox, Stream-JSON]
-    related_skills: [grok, codex, claude-code, hermes-agent]
+name: "ai-orch:antigravity-cli"
+description: ""
 ---
+
 
 # Antigravity CLI (`agy`) — Patched Orchestration
 
@@ -42,14 +35,9 @@ Operator guide for the Antigravity CLI, invoked as `agy`. Run all `agy` commands
 
 ### Pipeline Syntax
 
-#### Windows (PowerShell):
-```powershell
-$OutputEncoding = [System.Text.Encoding]::UTF8; agy -p "Your prompt here" --output-format=stream-json --model "<model>" --dangerously-skip-permissions | node <skill_path>/scripts/index.js
-```
-
-#### Windows (CMD):
+#### Windows:
 ```cmd
-chcp 65001 > nul && agy -p "Your prompt here" --output-format=stream-json --model "<model>" --dangerously-skip-permissions | node <skill_path>/scripts/index.js
+cmd /c "chcp 65001 > nul && agy -p ""Your prompt here"" --output-format=stream-json --model ""<model>"" --dangerously-skip-permissions | node <skill_path>/scripts/index.js"
 ```
 
 #### POSIX (Linux / macOS):

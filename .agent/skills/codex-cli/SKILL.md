@@ -1,9 +1,8 @@
 ---
-name: codex-cli
-description: Orchestrate OpenAI Codex CLI for parallel task execution and real-time NDJSON event parsing. (user)
-version: 1.2.0-patched
-source: https://github.com/kingkongshot/prompts/tree/main/skills/codex-cli
+name: "ai-orch:codex-cli"
+description: ""
 ---
+
 
 # Codex CLI Orchestrator (Patched for Event Streaming)
 
@@ -23,19 +22,13 @@ source: https://github.com/kingkongshot/prompts/tree/main/skills/codex-cli
 
 ## Single-Line Cross-Platform Execution Pipeline
 
-> **IMPORTANT (PATCHED)**: Run `codex exec --json` in a single-line pipeline piped directly into `node <skill_path>/scripts/index.js`. Always ensure stdin closure (`echo "" |`) and cross-platform UTF-8 encoding.
+> **IMPORTANT (PATCHED)**: Run `codex exec --json` in a single-line pipeline piped directly into `node <skill_path>/scripts/index.js`. Always ensure stdin closure (`<command> < NUL` on Windows, `echo "" |` on POSIX) and cross-platform UTF-8 encoding.
 
 ### Pipeline Syntax
 
-
-#### Windows (PowerShell):
-```powershell
-$OutputEncoding = [System.Text.Encoding]::UTF8; echo "" | codex exec --json -m <model> "Your prompt here" | node <skill_path>/scripts/index.js
-```
-
-#### Windows (CMD):
+#### Windows:
 ```cmd
-chcp 65001 > nul && echo "" | codex exec --json -m <model> "Your prompt here" | node <skill_path>/scripts/index.js
+cmd /c "chcp 65001 > nul && codex exec --json -m <model> ""Your prompt here"" < NUL | node <skill_path>/scripts/index.js"
 ```
 
 #### POSIX (Linux / macOS):
@@ -67,6 +60,16 @@ The parser script in `scripts/index.js` processes NDJSON events from `codex` in 
 
 ### Commands
 
+#### Windows:
+```cmd
+# Single-line execution with parser pipeline:
+cmd /c "chcp 65001 > nul && codex exec --json ""prompt"" < NUL | node <skill_path>/scripts/index.js"
+
+# Resume session with parser pipeline:
+cmd /c "chcp 65001 > nul && echo fix issues | codex exec resume <thread_id> --full-auto --json | node <skill_path>/scripts/index.js"
+```
+
+#### POSIX:
 ```bash
 # Single-line execution with parser pipeline:
 echo "" | codex exec --json "prompt" | node <skill_path>/scripts/index.js
