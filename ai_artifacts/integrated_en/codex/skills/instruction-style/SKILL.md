@@ -22,6 +22,7 @@ Execute the following steps when creating or modifying an instruction.
 2. Remove filler words, convoluted phrasing, and lengthy reasoning.
 3. Express each thought in a single unambiguous formulation.
 4. Preserve all target completeness while reducing the text.
+5. Do not add a level-one heading (`# ...`) at the beginning of a Markdown instruction's body when it merely repeats the instruction's assigned name.
 
 ## 3. Calibrate the Abstraction Level
 
